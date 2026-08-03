@@ -1,0 +1,191 @@
+{
+  "config": {
+    "dwell_seconds": 12,
+    "data_refresh_minutes": 5,
+    "nightly_reload_hour": 4
+  },
+  "signs": [
+    {
+      "file": "men_in_black_2026-08-01.png",
+      "title": "Men in Black",
+      "start": "2026-08-03",
+      "end": "2026-08-01",
+      "theme": "🚀 Sci-Fi Odyssey"
+    },
+    {
+      "file": "school_of_rock_2026-08-07.png",
+      "title": "School of Rock",
+      "start": "2026-08-03",
+      "end": "2026-08-07",
+      "theme": "😂 Comedy Night"
+    },
+    {
+      "file": "moana_2026-08-08.png",
+      "title": "Moana",
+      "start": "2026-08-03",
+      "end": "2026-08-08",
+      "theme": "👨‍👩‍👧 Family Night"
+    },
+    {
+      "file": "black_panther_2026-08-15.png",
+      "title": "Black Panther",
+      "start": "2026-08-03",
+      "end": "2026-08-15",
+      "theme": "💥 Action Night"
+    },
+    {
+      "file": "catch_me_if_you_can_2026-08-21.png",
+      "title": "Catch Me If You Can",
+      "start": "2026-08-03",
+      "end": "2026-08-21",
+      "theme": "🔪 Thrill & Chill Night"
+    },
+    {
+      "file": "nfl_preseason_at_jade_2026-08-14.png",
+      "title": "NFL Preseason @ Jade",
+      "start": "2026-08-03",
+      "end": "2026-08-22",
+      "theme": "🏈 NFL Preseason"
+    },
+    {
+      "file": "f1_dutch_grand_prix_2026-08-23.png",
+      "title": "F1 Dutch Grand Prix",
+      "start": "2026-08-03",
+      "end": "2026-08-23",
+      "theme": "🏎️ Formula 1 Sunday"
+    },
+    {
+      "file": "pitch_perfect_2026-08-28.png",
+      "title": "Pitch Perfect",
+      "start": "2026-08-03",
+      "end": "2026-08-28",
+      "theme": "😂 Comedy Night"
+    },
+    {
+      "file": "new_mexico_state_at_florida_state_2026-08-29.png",
+      "title": "New Mexico State at Florida State",
+      "start": "2026-08-03",
+      "end": "2026-08-29",
+      "theme": "🏈 College Gameday @ Jade"
+    },
+    {
+      "file": "pga_tour_championship_2026-08-30.png",
+      "title": "PGA Tour Championship",
+      "start": "2026-08-03",
+      "end": "2026-08-30",
+      "theme": "⛳ Tour Championship"
+    },
+    {
+      "file": "ferris_bueller_2026-09-04.png",
+      "title": "Ferris Bueller's Day Off",
+      "start": "2026-08-03",
+      "end": "2026-09-04",
+      "theme": "🌅 Summer Sendoff"
+    },
+    {
+      "file": "lotr_fellowship_2026-09-05.png",
+      "title": "The Lord of the Rings: The Fellowship of the Ring",
+      "start": "2026-08-03",
+      "end": "2026-09-05",
+      "theme": "🚀 Sci-Fi Odyssey"
+    },
+    {
+      "file": "wicked_2026-09-06.png",
+      "title": "Wicked",
+      "start": "2026-08-03",
+      "end": "2026-09-06",
+      "theme": "🎶 Magic & Melody"
+    },
+    {
+      "file": "shrek_2026-09-07.png",
+      "title": "Shrek",
+      "start": "2026-08-03",
+      "end": "2026-09-07",
+      "theme": "👨‍👩‍👧 Family Night"
+    },
+    {
+      "file": "patriots_at_seahawks_2026-09-09.png",
+      "title": "Patriots at Seahawks",
+      "start": "2026-08-03",
+      "end": "2026-09-09",
+      "theme": "🏈 NFL Season Kickoff"
+    },
+    {
+      "file": "49ers_at_rams_2026-09-10.png",
+      "title": "49ers at Rams",
+      "start": "2026-08-03",
+      "end": "2026-09-10",
+      "theme": "🏈 NFL Thursday Night Football"
+    },
+    {
+      "file": "enola_holmes_2026-09-11.png",
+      "title": "Enola Holmes",
+      "start": "2026-08-03",
+      "end": "2026-09-11",
+      "theme": "🔪 Thrill & Chill Night"
+    },
+    {
+      "file": "ready_player_one_2026-09-12.png",
+      "title": "Ready Player One",
+      "start": "2026-08-03",
+      "end": "2026-09-12",
+      "theme": "🚀 Sci-Fi Odyssey"
+    },
+    {
+      "file": "barbie_2026-09-18.png",
+      "title": "Barbie",
+      "start": "2026-08-03",
+      "end": "2026-09-18",
+      "theme": "😂 Comedy Night"
+    },
+    {
+      "file": "florida_state_at_alabama_florida_at_auburn_2026-09-19.png",
+      "title": "Florida State at Alabama + Florida at Auburn",
+      "start": "2026-08-03",
+      "end": "2026-09-19",
+      "theme": "🏈 College Gameday @ Jade"
+    },
+    {
+      "file": "la_la_land_2026-09-25.png",
+      "title": "La La Land",
+      "start": "2026-08-03",
+      "end": "2026-09-25",
+      "theme": "💘 Romance Night"
+    },
+    {
+      "file": "wonder_woman_2026-09-26.png",
+      "title": "Wonder Woman",
+      "start": "2026-08-03",
+      "end": "2026-09-26",
+      "theme": "💥 Action Night"
+    },
+    {
+      "file": "college_gameday_at_jade_2026-09-05.png",
+      "title": "College Gameday @ Jade",
+      "start": "2026-08-03",
+      "end": "2026-09-26",
+      "theme": "🏈 College Gameday @ Jade"
+    },
+    {
+      "file": "nfl_sundays_at_jade_2026-09-13.png",
+      "title": "NFL Sundays @ Jade",
+      "start": "2026-08-03",
+      "end": "2026-09-27",
+      "theme": "🏈 NFL Sunday @ Jade"
+    },
+    {
+      "file": "thursday_monday_night_football_at_jade_2026-09-14.png",
+      "title": "Thursday & Monday Night Football @ Jade",
+      "start": "2026-08-03",
+      "end": "2026-09-28",
+      "theme": "🏈 NFL Weekly"
+    },
+    {
+      "file": "panthers_at_hurricanes_2026-09-29.png",
+      "title": "Panthers at Hurricanes",
+      "start": "2026-08-03",
+      "end": "2026-09-29",
+      "theme": "🏒 NHL Season Opener"
+    }
+  ]
+}

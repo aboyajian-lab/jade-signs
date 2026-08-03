@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jade Big Screen — Sidebar (442x1080)</title>
+<style>
+  html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
+  .slide { position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
+           opacity:0; transition:opacity 1.2s ease; }
+  .slide.on { opacity:1; }
+  #fallback { position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+              flex-direction:column; color:#e9e2d0; font-family:Georgia,'Times New Roman',serif;
+              text-align:center; background:radial-gradient(ellipse at center,#14231c 0%,#0a120e 70%); }
+  #fallback h1 { font-size:9vmin; letter-spacing:.35em; margin:0; font-weight:400; }
+  #fallback p  { font-size:3.2vmin; letter-spacing:.18em; opacity:.75; margin-top:2vmin;
+                 font-family:Verdana,Arial,sans-serif; }
+</style>
+</head>
+<body>
+<img class="slide" id="a" alt=""><img class="slide" id="b" alt="">
+<div id="fallback"><h1>THE JADE</h1><p>BIG SCREEN &middot; COURTYARD</p></div>
+<script>
+(function () {
+  var DIR = "signs/side_banners/";
+  var cfg = { dwell_seconds: 12, data_refresh_minutes: 5, nightly_reload_hour: 4 };
+  var playlist = [], idx = 0, front = null;
+  var imgA = document.getElementById("a"), imgB = document.getElementById("b");
+  var fallback = document.getElementById("fallback");
+
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  function active(all) {
+    var t = todayStr();
+    return all.filter(function (s) { return s.start <= t && t <= s.end; });
+  }
+  function show(src) {
+    var back = (front === imgA) ? imgB : imgA;
+    back.src = src;
+    var done = function () {
+      back.classList.add("on");
+      if (front) front.classList.remove("on");
+      front = back;
+    };
+    if (back.complete) done(); else back.onload = done;
+  }
+  function tick() {
+    if (!playlist.length) {
+      fallback.style.display = "flex";
+      imgA.classList.remove("on"); imgB.classList.remove("on");
+      return;
+    }
+    fallback.style.display = "none";
+    idx = idx % playlist.length;
+    show(DIR + playlist[idx].file);
+    idx++;
+    // preload next
+    if (playlist.length > 1) { var pre = new Image(); pre.src = DIR + playlist[idx % playlist.length].file; }
+  }
+  function load() {
+    fetch("playlist.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.config) cfg = data.config;
+        var next = active(data.signs || []);
+        var changed = JSON.stringify(next) !== JSON.stringify(playlist);
+        playlist = next;
+        if (changed) { idx = 0; tick(); }
+      })
+      .catch(function () { /* keep rotating what we have */ });
+  }
+  function loop() { tick(); setTimeout(loop, (cfg.dwell_seconds || 12) * 1000); }
+  setInterval(load, (cfg.data_refresh_minutes || 5) * 60 * 1000);
+  setInterval(function () {
+    var d = new Date();
+    if (d.getHours() === (cfg.nightly_reload_hour || 4) && d.getMinutes() === 0) location.reload(true);
+  }, 55 * 1000);
+  fetch("playlist.json?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) { if (data.config) cfg = data.config; playlist = active(data.signs || []); })
+    .catch(function () {})
+    .then(loop);
+})();
+</script>
+</body>
+</html>
