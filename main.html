@@ -68,12 +68,11 @@
       var soft = (type === "zoom" || type === "flip");
       setT(back, IN_FROM[type] || "none", soft ? 0 : 1, false);
       back.style.zIndex = 3; out.style.zIndex = 2;
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        setT(back, "none", 1, true);
-        setT(out, OUT_TO[type] || "none", 0, true);
-        var old = out;
-        setTimeout(function () { setT(old, "none", 0, false); }, (cfg.transition_ms || 650) + 80);
-      }); });
+      void back.offsetWidth; // flush styles so the transition animates from the pre-position
+      setT(back, "none", 1, true);
+      setT(out, OUT_TO[type] || "none", 0, true);
+      var old = out;
+      setTimeout(function () { setT(old, "none", 0, false); }, (cfg.transition_ms || 650) + 80);
       front = back;
     };
     if (back.complete && back.getAttribute("src")) { go(); } else { back.onload = go; }
