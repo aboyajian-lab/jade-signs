@@ -49,7 +49,7 @@ var PANE_DEFS = [{ sel: "#p-main", kind: "main" }];
               overnight: { start: "22:00", end: "06:00" },
               countdown: { lead_hours: 36, every_n: 3 }, general_every_n: 3 };
   var data = { signs: [], general_mains: [], general_banners: [], overnight_mains: [], overnight_banners: [] };
-  var idx = 0, tcount = 0, lastMode = null;
+  var idx = 0, tcount = 0, lastMode = null, curDwell = 0;
   var q = location.search;
   var DEMO_CD = q.indexOf("demo=countdown") >= 0, DEMO_NIGHT = q.indexOf("demo=overnight") >= 0;
   var EASE = "cubic-bezier(.22,.61,.36,1)";
@@ -98,7 +98,10 @@ var PANE_DEFS = [{ sel: "#p-main", kind: "main" }];
   function seqFor(kind) {
     if (inOvernight()) {
       var ov = (kind === "main" ? data.overnight_mains : data.overnight_banners) || [];
-      return ov.map(function (f) { return { k: "img", dir: DIRS[kind].overnight, f: f, drift: true }; });
+      var sd = (cfg.overnight && cfg.overnight.sign_seconds) || 25;
+      var oseq = ov.map(function (f) { return { k: "img", dir: DIRS[kind].overnight, f: f, drift: true, dwell: sd }; });
+      if (kind === "main") oseq.unshift({ k: "page", src: "bounce.html", dwell: (cfg.overnight && cfg.overnight.bounce_seconds) || 120 });
+      return oseq;
     }
     var act = activeSigns(), seq = [], specials = [], si = 0;
     if (kind === "main") {
@@ -118,7 +121,9 @@ var PANE_DEFS = [{ sel: "#p-main", kind: "main" }];
     return seq;
   }
   function renderItem(layer, item) {
-    if (item.k === "img") {
+    if (item.k === "page") {
+      layer.innerHTML = '<iframe src="' + item.src + '" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000"></iframe>';
+    } else if (item.k === "img") {
       layer.innerHTML = '<img class="fill' + (item.drift ? " drift" : "") + '" src="' + item.dir + item.f + '" alt="">';
     } else if (item.k === "cd") {
       var s = item.ev;
@@ -182,7 +187,9 @@ var PANE_DEFS = [{ sel: "#p-main", kind: "main" }];
     panes.forEach(function (p) {
       var seq = seqs[p.kind];
       if (!seq.length) return;
-      swapPane(p, seq[idx % seq.length], type);
+      var item = seq[idx % seq.length];
+      if (p === panes[0]) curDwell = item.dwell || cfg.dwell_seconds || 12;
+      swapPane(p, item, type);
     });
     idx++;
   }
@@ -209,7 +216,7 @@ var PANE_DEFS = [{ sel: "#p-main", kind: "main" }];
       })
       .catch(function () {});
   }
-  function loop() { tick(); setTimeout(loop, (cfg.dwell_seconds || 12) * 1000); }
+  function loop() { tick(); setTimeout(loop, (curDwell || cfg.dwell_seconds || 12) * 1000); }
   setInterval(load, (cfg.data_refresh_minutes || 5) * 60 * 1000);
   setInterval(function () {
     var d = new Date();

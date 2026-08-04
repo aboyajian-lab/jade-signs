@@ -13,7 +13,9 @@
     "transition_ms": 650,
     "overnight": {
       "start": "22:00",
-      "end": "06:00"
+      "end": "06:00",
+      "bounce_seconds": 120,
+      "sign_seconds": 25
     },
     "countdown": {
       "lead_hours": 36,
