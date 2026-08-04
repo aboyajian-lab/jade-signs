@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jade Big Screen — Sidebar (442x1080)</title>
+<title>Jade Big Screen — Full Screen (main + sidebar)</title>
 <style>
   html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
+  #stage { display:flex; width:100%; height:100%; }
+  #mainwrap { flex:1 1 auto; position:relative; height:100%; overflow:hidden; }
+  #sidewrap { flex:0 0 auto; height:100%; aspect-ratio:442/1080; position:relative; overflow:hidden; border-left:2px solid #000; }
   .slide { position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
            opacity:0; transform:none; will-change:transform,opacity; backface-visibility:hidden; }
   #fallback { position:absolute; inset:0; display:none; align-items:center; justify-content:center;
@@ -17,15 +20,21 @@
 </style>
 </head>
 <body>
-<img class="slide" id="a" alt=""><img class="slide" id="b" alt="">
+<div id="stage">
+  <div id="mainwrap"><img class="slide" id="ma" alt=""><img class="slide" id="mb" alt=""></div>
+  <div id="sidewrap"><img class="slide" id="sa" alt=""><img class="slide" id="sb" alt=""></div>
+</div>
 <div id="fallback"><h1>THE JADE</h1><p>BIG SCREEN &middot; COURTYARD</p></div>
 <script>
 (function () {
-  var DIR = "signs/side_banners/";
+  var MAIN = "signs/main_signs/", SIDE = "signs/side_banners/";
   var cfg = { dwell_seconds: 12, data_refresh_minutes: 5, nightly_reload_hour: 4,
               transitions: ["slide-left","slide-up","zoom","flip","slide-right"], transition_ms: 650 };
-  var playlist = [], idx = 0, front = null, tcount = 0;
-  var imgA = document.getElementById("a"), imgB = document.getElementById("b");
+  var playlist = [], idx = 0, tcount = 0;
+  var panes = [
+    { a: document.getElementById("ma"), b: document.getElementById("mb"), front: null, dir: MAIN },
+    { a: document.getElementById("sa"), b: document.getElementById("sb"), front: null, dir: SIDE }
+  ];
   var fallback = document.getElementById("fallback");
   var EASE = "cubic-bezier(.22,.61,.36,1)";
 
@@ -57,14 +66,12 @@
     "zoom":        "scale(.93)",
     "flip":        "perspective(1600px) rotateY(30deg) scale(.95)"
   };
-  function swap(src) {
-    var back = (front === imgA) ? imgB : imgA;
-    var out = front;
+  function swapPane(p, src, type) {
+    var back = (p.front === p.a) ? p.b : p.a;
+    var out = p.front;
     back.src = src;
     var go = function () {
-      if (!out) { setT(back, "none", 1, false); front = back; return; }
-      var types = cfg.transitions && cfg.transitions.length ? cfg.transitions : ["slide-left"];
-      var type = types[tcount % types.length]; tcount++;
+      if (!out) { setT(back, "none", 1, false); p.front = back; return; }
       var soft = (type === "zoom" || type === "flip");
       setT(back, IN_FROM[type] || "none", soft ? 0 : 1, false);
       back.style.zIndex = 3; out.style.zIndex = 2;
@@ -74,21 +81,28 @@
         var old = out;
         setTimeout(function () { setT(old, "none", 0, false); }, (cfg.transition_ms || 650) + 80);
       }); });
-      front = back;
+      p.front = back;
     };
     if (back.complete && back.getAttribute("src")) { go(); } else { back.onload = go; }
   }
   function tick() {
     if (!playlist.length) {
       fallback.style.display = "flex";
-      setT(imgA, "none", 0, false); setT(imgB, "none", 0, false); front = null;
+      panes.forEach(function (p) { setT(p.a, "none", 0, false); setT(p.b, "none", 0, false); p.front = null; });
       return;
     }
     fallback.style.display = "none";
     idx = idx % playlist.length;
-    swap(DIR + playlist[idx].file);
+    var f = playlist[idx].file;
+    var types = cfg.transitions && cfg.transitions.length ? cfg.transitions : ["slide-left"];
+    var type = types[tcount % types.length]; tcount++;
+    swapPane(panes[0], MAIN + f, type);
+    swapPane(panes[1], SIDE + f, type);
     idx++;
-    if (playlist.length > 1) { new Image().src = DIR + playlist[idx % playlist.length].file; }
+    if (playlist.length > 1) {
+      var nf = playlist[idx % playlist.length].file;
+      new Image().src = MAIN + nf; new Image().src = SIDE + nf;
+    }
   }
   function load() {
     fetch("playlist.json?t=" + Date.now(), { cache: "no-store" })

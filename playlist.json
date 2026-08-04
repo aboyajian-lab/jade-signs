@@ -2,7 +2,15 @@
   "config": {
     "dwell_seconds": 12,
     "data_refresh_minutes": 5,
-    "nightly_reload_hour": 4
+    "nightly_reload_hour": 4,
+    "transitions": [
+      "slide-left",
+      "slide-up",
+      "zoom",
+      "flip",
+      "slide-right"
+    ],
+    "transition_ms": 650
   },
   "signs": [
     {

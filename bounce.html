@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jade Big Screen — Bounce</title>
+<!-- Classic DVD-screensaver bouncer, Jade edition.
+     Swap the wordmark below for the real logo: replace the #logo inner HTML
+     with <img src="assets/jade_logo.png"> once the logo file is added. -->
+<style>
+  html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
+  #logo { position:absolute; left:0; top:0; will-change:transform; text-align:center;
+          font-family:Georgia,'Times New Roman',serif; user-select:none; }
+  #logo .word { font-size:7.5vmin; letter-spacing:.3em; font-weight:400; line-height:1.05; }
+  #logo .sub  { font-size:1.9vmin; letter-spacing:.34em; opacity:.8; margin-top:.8vmin;
+                font-family:Verdana,Arial,sans-serif; }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none;
+           transition:opacity 500ms ease; }
+</style>
+</head>
+<body>
+<div id="flash"></div>
+<div id="logo"><div class="word">THE JADE</div><div class="sub">BIG SCREEN &middot; COURTYARD</div></div>
+<script>
+(function () {
+  var COLORS = ["#e9b949", "#57b98a", "#e05252", "#e9e2d0", "#7fb3e0", "#c98ae0"];
+  var logo = document.getElementById("logo"), flash = document.getElementById("flash");
+  var ci = 0, x = 60, y = 80, vx = 2.4, vy = 2.1;
+  function paint() { logo.style.color = COLORS[ci % COLORS.length]; }
+  function bounce(cornerish) {
+    ci++; paint();
+    if (cornerish) { flash.style.opacity = .25; setTimeout(function () { flash.style.opacity = 0; }, 120); }
+  }
+  paint();
+  function step() {
+    var W = window.innerWidth, H = window.innerHeight;
+    var w = logo.offsetWidth, h = logo.offsetHeight;
+    x += vx; y += vy;
+    var hitX = false, hitY = false;
+    if (x <= 0)      { x = 0;      vx = Math.abs(vx);  hitX = true; }
+    if (x >= W - w)  { x = W - w;  vx = -Math.abs(vx); hitX = true; }
+    if (y <= 0)      { y = 0;      vy = Math.abs(vy);  hitY = true; }
+    if (y >= H - h)  { y = H - h;  vy = -Math.abs(vy); hitY = true; }
+    if (hitX || hitY) bounce(hitX && hitY);
+    logo.style.transform = "translate(" + x + "px," + y + "px)";
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
