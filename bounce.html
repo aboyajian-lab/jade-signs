@@ -20,13 +20,13 @@
 </head>
 <body>
 <div id="flash"></div>
-<div id="logo"><div class="word">THE JADE</div><div class="sub">BIG SCREEN &middot; COURTYARD</div></div>
+<div id="logo"><img src="assets/jade_logo_cream.png" alt="The Jade" style="width:26vw;display:block;filter:drop-shadow(0 0 18px rgba(0,0,0,.6))"></div>
 <script>
 (function () {
   var COLORS = ["#e9b949", "#57b98a", "#e05252", "#e9e2d0", "#7fb3e0", "#c98ae0"];
   var logo = document.getElementById("logo"), flash = document.getElementById("flash");
   var ci = 0, x = 60, y = 80, vx = 2.4, vy = 2.1;
-  function paint() { logo.style.color = COLORS[ci % COLORS.length]; }
+  function paint() { logo.style.filter = "hue-rotate(" + (ci * 47 % 360) + "deg) drop-shadow(0 0 14px rgba(0,0,0,.5))"; }
   function bounce(cornerish) {
     ci++; paint();
     if (cornerish) { flash.style.opacity = .25; setTimeout(function () { flash.style.opacity = 0; }, 120); }
