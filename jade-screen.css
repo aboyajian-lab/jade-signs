@@ -1,0 +1,192 @@
+/* ==========================================================================
+   Jade Big Screen — shared styles for main.html / banner.html / screen.html
+   Palette per CLAUDE.md rule 14. Do not hard-code colors below; use the vars.
+   ========================================================================== */
+
+:root {
+  --jade:        #5CE1E6;   /* primary brand accent */
+  --jade-deep:   #2FA9AE;
+  --cream:       #EEEBE9;   /* headline ink on dark — never pure white */
+  --muted:       #93A2A8;
+  --gold:        #E9B949;   /* sports / premium only */
+  --alert:       #E11D2A;   /* kickers + alerts only */
+  --canvas:      #000000;
+  --night-bg:    #030405;
+  --night-ink:   #EDEAE4;
+  --ui: 'Segoe UI', Verdana, Arial, Helvetica, sans-serif;
+}
+
+html, body { margin:0; padding:0; width:100%; height:100%; background:var(--canvas); overflow:hidden; }
+.pane { position:absolute; inset:0; overflow:hidden; }
+.layer1, .layer2 { position:absolute; inset:0; opacity:0; transform:none;
+                   will-change:transform,opacity; backface-visibility:hidden; }
+.fill { width:100%; height:100%; object-fit:contain; display:block; }
+.drift { animation: drift 70s ease-in-out infinite alternate; }
+@keyframes drift { from { transform:translate(-10px,-6px) scale(1.02); } to { transform:translate(10px,6px) scale(1.02); } }
+
+/* ---------- Countdown card ------------------------------------------------ */
+.cdwrap { position:absolute; inset:0; overflow:hidden; background:var(--canvas); }
+.cdbg   { position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover;
+          filter:blur(16px) brightness(.30) saturate(1.05); }
+.cdol   { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+          justify-content:center; text-align:center; gap:2.2vh; color:var(--cream); font-family:var(--ui);
+          padding:0 5%; box-sizing:border-box; }
+.cdk    { font-size:2.4vh; letter-spacing:.42em; font-weight:700; color:var(--jade);
+          text-transform:uppercase; }
+.cdk.sport { background:var(--alert); color:#fff; letter-spacing:.24em; padding:.7vh 1.6vh;
+             border-radius:.5vh; }
+.cdt    { font-size:6.4vh; font-weight:800; letter-spacing:.04em; line-height:1.06; max-width:94%;
+          text-shadow:0 4px 30px rgba(0,0,0,.75); }
+.cdwhen { font-size:3vh; letter-spacing:.26em; font-weight:700; color:var(--jade); }
+.cdlogo { height:10vh; margin-top:1.2vh; opacity:.92; }
+
+/* segmented timer — the hero */
+.cdclock { display:flex; align-items:flex-start; justify-content:center; gap:2.2vh; }
+.cdseg   { display:flex; flex-direction:column; align-items:center; min-width:9vh; }
+.cdnum   { font-size:13vh; line-height:.94; font-weight:800; letter-spacing:.01em;
+           font-variant-numeric:tabular-nums; text-shadow:0 6px 40px rgba(0,0,0,.85); }
+.cdlab   { font-size:2.1vh; letter-spacing:.34em; font-weight:700; color:var(--jade); margin-top:1vh; }
+.cdclock .cdseg + .cdseg { border-left:1px solid rgba(238,235,233,.22); padding-left:2.2vh; }
+/* sports variant: boxed cells, gold labels, no dividers */
+.cdclock.sport .cdseg { background:rgba(0,0,0,.55); border:1px solid rgba(233,185,73,.45);
+                        border-radius:1.4vh; padding:1.6vh 1.8vh .9vh; }
+.cdclock.sport .cdseg + .cdseg { border-left:1px solid rgba(233,185,73,.45); padding-left:1.8vh; }
+.cdclock.sport .cdlab { color:var(--gold); }
+.cdclock.sport .cdnum { font-size:11vh; }
+
+/* ---------- "Tonight" chip (corner overlay on event days) ----------------- */
+.chip { position:absolute; top:3.4%; right:2.6%; z-index:6; display:none; align-items:center;
+        box-sizing:border-box; max-width:94%; overflow:hidden;
+        gap:1.6vh; padding:1.3vh 2.6vh; border-radius:99px; font-family:var(--ui);
+        background:rgba(4,6,7,.82); border:1px solid rgba(92,225,230,.55);
+        box-shadow:0 .8vh 3vh rgba(0,0,0,.6); backdrop-filter:blur(6px); }
+.chip.on { display:flex; }
+.chip .k { font-size:1.9vh; font-weight:700; letter-spacing:.30em; color:var(--jade); }
+.chip .d { width:1px; align-self:stretch; background:rgba(238,235,233,.28); }
+.chip .v { font-size:2.4vh; font-weight:800; letter-spacing:.05em; color:var(--cream);
+           white-space:nowrap; max-width:52vh; overflow:hidden; text-overflow:ellipsis; }
+
+/* ---------- Overnight: seamless dark moving background -------------------- */
+/* Every animation below is a full 360deg rotation on a linear timing function,
+   so the last frame is pixel-identical to the first — no jump, ever. */
+/* No blur filters anywhere here — soft radial gradients are already smooth, and a
+   large blur() is the one effect that will melt a Raspberry Pi. Each layer is a
+   plain rotation, which is GPU-composited and mathematically seamless at 360deg. */
+.nightwrap { position:absolute; inset:0; overflow:hidden; background:var(--night-bg); }
+.nightbg   { position:absolute; inset:0; z-index:0; overflow:hidden; }
+.nightbg i { position:absolute; inset:-45%; display:block; transform-origin:50% 50%;
+             animation-timing-function:linear; animation-iteration-count:infinite;
+             will-change:transform; }
+.nightbg i:nth-child(1){ background:radial-gradient(45% 38% at 32% 40%, rgba(24,86,92,.55), transparent 68%);
+                         animation-name:spin;  animation-duration:190s; }
+.nightbg i:nth-child(2){ background:radial-gradient(42% 34% at 68% 62%, rgba(12,44,70,.55), transparent 68%);
+                         animation-name:spinr; animation-duration:260s; }
+.nightbg i:nth-child(3){ background:radial-gradient(55% 44% at 55% 28%, rgba(46,32,74,.42), transparent 70%);
+                         animation-name:spin;  animation-duration:330s; }
+@keyframes spin  { from { transform:rotate(0deg);   } to { transform:rotate(360deg);  } }
+@keyframes spinr { from { transform:rotate(360deg); } to { transform:rotate(0deg);    } }
+.nightstars { position:absolute; inset:0; z-index:1; opacity:.5;
+              animation:starturn 600s linear infinite; transform-origin:50% 50%; }
+@keyframes starturn { from { transform:rotate(0deg) scale(1.35); } to { transform:rotate(360deg) scale(1.35); } }
+.nightstars b { position:absolute; background:#9FB6BD; border-radius:50%; }
+/* anti burn-in: whole card creeps a few px and returns to exactly where it began */
+.nightcard { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column;
+             align-items:center; justify-content:center; text-align:center;
+             font-family:var(--ui); color:var(--night-ink); padding:0 6%; box-sizing:border-box;
+             animation:creep 900s linear infinite; }
+@keyframes creep { 0%{transform:translate(0,0)} 25%{transform:translate(10px,6px)}
+                   50%{transform:translate(0,12px)} 75%{transform:translate(-10px,6px)}
+                   100%{transform:translate(0,0)} }
+.nightcard .k { font-size:2.1vh; letter-spacing:.34em; font-weight:700; color:var(--jade); opacity:.85; }
+.nightcard .r { width:6vh; height:.35vh; background:var(--jade); opacity:.8; margin:2.4vh 0 2.8vh; }
+.nightcard h1 { margin:0; font-size:8.6vh; line-height:1.02; font-weight:800; letter-spacing:.01em; }
+.nightcard p  { margin:3vh 0 0; font-size:2.9vh; line-height:1.45; font-weight:500; color:var(--muted); }
+.nightcard .lg { position:absolute; bottom:6%; width:14vh; opacity:.45; }
+
+/* ---------- Weather card -------------------------------------------------- */
+.wxwrap { position:absolute; inset:0; overflow:hidden; background:var(--night-bg); font-family:var(--ui);
+          color:var(--cream); }
+.wxbg   { position:absolute; inset:0; z-index:0; overflow:hidden; }
+.wxvig  { position:absolute; inset:0; z-index:1; pointer-events:none;
+          background:radial-gradient(120% 90% at 50% 45%, transparent 30%, rgba(0,0,0,.62) 100%); }
+.wxbg i { position:absolute; inset:-45%; transform-origin:50% 50%; will-change:transform;
+          animation:spin 240s linear infinite; }
+.wxrain { position:absolute; inset:0; z-index:1; opacity:0; overflow:hidden; }
+.wxrain.on { opacity:.5; }
+.wxrain s { position:absolute; top:-12%; width:1.5px; height:9%;
+            background:linear-gradient(transparent, rgba(180,220,235,.75));
+            animation:fall linear infinite; }
+@keyframes fall { from { transform:translateY(-12vh); } to { transform:translateY(112vh); } }
+/* NOTE: percentage padding resolves against WIDTH, not height — use vh for the
+   vertical sides or the top gap silently collapses on the 442px pane. */
+.wxin   { position:absolute; inset:0; z-index:2; display:flex; padding:7vh 5%; box-sizing:border-box; gap:4%; }
+.wxnow  { flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; }
+.wxloc  { font-size:2.2vh; letter-spacing:.30em; font-weight:700; color:var(--jade); white-space:nowrap; }
+.wxloc .tight { display:none; }
+.wxtemp { font-size:22vh; line-height:.86; font-weight:800; letter-spacing:-.02em; margin:1.5vh 0 0;
+          text-shadow:0 6px 44px rgba(0,0,0,.7); }
+.wxcond { font-size:5vh; font-weight:800; letter-spacing:.02em; margin-top:.4vh; }
+.wxfeel { font-size:2.6vh; color:var(--muted); margin-top:1vh; letter-spacing:.06em; }
+.wxalert{ margin-top:3vh; display:none; align-items:center; gap:1.4vh; align-self:flex-start;
+          padding:1.3vh 2.4vh; border-radius:99px; background:rgba(92,225,230,.14);
+          border:1px solid rgba(92,225,230,.5); font-size:2.5vh; font-weight:700; color:var(--jade);
+          letter-spacing:.04em; }
+.wxalert.on { display:flex; }
+.wxside { flex:0 0 38%; display:flex; flex-direction:column; justify-content:center; gap:3vh; }
+.wxhrs  { display:flex; justify-content:space-between; gap:1vh; }
+.wxhr   { text-align:center; flex:1 1 0; }
+.wxhr .t{ font-size:2.1vh; font-weight:700; letter-spacing:.14em; color:var(--muted); }
+.wxhr .g{ font-size:3.4vh; margin:.8vh 0; }
+.wxhr .v{ font-size:3.2vh; font-weight:800; }
+.wxhr.wet .t, .wxhr.wet .v { color:var(--jade); }
+.wxrule { height:1px; background:rgba(238,235,233,.16); }
+.wxday  { display:flex; align-items:center; font-size:2.7vh; padding:.9vh 0; }
+.wxday .d { flex:0 0 24%; font-weight:700; letter-spacing:.14em; color:var(--muted); }
+.wxday .g { flex:0 0 18%; font-size:3vh; }
+.wxday .h { flex:1 1 auto; text-align:right; font-weight:800; }
+.wxday .l { flex:0 0 20%; text-align:right; color:var(--muted); font-weight:700; }
+.wxlogo { position:absolute; right:3%; bottom:4%; z-index:3; width:12vh; opacity:.45; }
+
+/* Narrow panes (442x1080 sidebar). Scoped to a .narrow class that the script puts
+   on any pane whose own aspect ratio is portrait — NOT a viewport media query,
+   because screen.html holds a wide pane and a narrow pane in one viewport. */
+.narrow .cdt { font-size:4vh; }
+.narrow .cdnum { font-size:7.6vh; } .narrow .cdclock.sport .cdnum { font-size:6.4vh; }
+/* four segments never fit across 442px — lock to a 2x2 grid so nothing wraps orphaned */
+.narrow .cdclock { display:grid; grid-template-columns:1fr 1fr; gap:2vh 0; width:100%; }
+.narrow .cdseg { min-width:0; }
+.narrow .cdclock .cdseg + .cdseg { border-left:0; padding-left:0; }
+.narrow .cdclock .cdseg:nth-child(even) { border-left:1px solid rgba(238,235,233,.22); }
+.narrow .cdclock.sport .cdseg { padding:1.2vh 1vh .7vh; }
+.narrow .cdclock.sport { gap:1.4vh 1.4vh; }
+.narrow .cdclock.sport .cdseg:nth-child(even) { border-left:1px solid rgba(233,185,73,.45); }
+.narrow .cdlab { font-size:1.5vh; letter-spacing:.22em; }
+.narrow .cdk { font-size:1.7vh; letter-spacing:.24em; } .narrow .cdwhen { font-size:2.2vh; }
+.narrow .cdlogo { height:7vh; }
+.narrow .nightcard h1 { font-size:5.6vh; } .narrow .nightcard p { font-size:2.2vh; }
+/* top padding leaves room for the Tonight chip, which sits above this card */
+.narrow .wxin { flex-direction:column; padding:9.5vh 7% 5vh; gap:3vh; }
+.narrow .wxside { flex:1 1 auto; } .narrow .wxtemp { font-size:13vh; }
+.narrow .wxcond { font-size:3.4vh; }
+.narrow .wxnow { flex:0 0 auto; } .narrow .wxloc { font-size:1.7vh; letter-spacing:.2em; }
+.narrow .wxloc .wide { display:none; } .narrow .wxloc .tight { display:inline; }
+.narrow .wxfeel { font-size:2vh; } .narrow .wxalert { font-size:2vh; }
+.narrow .wxhr .t { font-size:1.6vh; } .narrow .wxhr .v { font-size:2.4vh; }
+.narrow .wxday { font-size:2.1vh; }
+/* The 442px pane is too narrow for the full chip — drop the TONIGHT label and the
+   divider, span the pane, and let the title ellipsize. Never let it clip. */
+.narrow .chip { top:2%; left:4%; right:4%; max-width:none; justify-content:center;
+                gap:1vh; padding:1.1vh 1.8vh; }
+.narrow .chip .k, .narrow .chip .d { display:none; }
+.narrow .chip .v { font-size:1.9vh; letter-spacing:.03em; max-width:100%; }
+.narrow .wxlogo { display:none; }
+.narrow .nightcard .k { font-size:1.55vh; letter-spacing:.18em; }
+.narrow .nightcard .lg { width:11vh; bottom:5%; }
+
+/* ---------- Fallback ------------------------------------------------------ */
+#fallback { position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+            flex-direction:column; color:#e9e2d0; font-family:Georgia,'Times New Roman',serif;
+            text-align:center; background:radial-gradient(ellipse at center,#14231c 0%,#0a120e 70%); z-index:9; }
+#fallback h1 { font-size:9vmin; letter-spacing:.35em; margin:0; font-weight:400; }
+#fallback p  { font-size:3.2vmin; letter-spacing:.18em; opacity:.75; margin-top:2vmin;
+               font-family:Verdana,Arial,sans-serif; }
