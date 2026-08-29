@@ -65,6 +65,12 @@ html, body { margin:0; padding:0; width:100%; height:100%; background:var(--canv
 .chip .d { width:1px; align-self:stretch; background:rgba(238,235,233,.28); }
 .chip .v { font-size:2.4vh; font-weight:800; letter-spacing:.05em; color:var(--cream);
            white-space:nowrap; max-width:52vh; overflow:hidden; text-overflow:ellipsis; }
+/* Long titles shuttle-scroll instead of ellipsizing (transform-only — Pi-safe).
+   The script adds .scroll and sets --shuttle-x/--shuttle-dur when the text overflows. */
+.chip .v span { display:inline-block; }
+.chip .v.scroll { text-overflow:clip; }
+.chip .v.scroll span { animation:chipshuttle var(--shuttle-dur,8s) ease-in-out 1s infinite alternate; }
+@keyframes chipshuttle { from { transform:translateX(0); } to { transform:translateX(var(--shuttle-x,-30%)); } }
 
 /* ---------- Overnight: seamless dark moving background -------------------- */
 /* Every animation below is a full 360deg rotation on a linear timing function,

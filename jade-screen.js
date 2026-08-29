@@ -67,7 +67,7 @@
   }
   function isSport(s) {
     if (s.kind) return s.kind === "sports";
-    return /🏈|🏀|⚾|🏒|⚽|🏎|⛳|🟊|🎾/.test(s.theme || "");
+    return /🏈|🏀|⚾|🏒|⚽|🏎|⛳|🥊|🎾/.test(s.theme || "");
   }
   function inOvernight() {
     if (DEMO_NIGHT) return true;
@@ -345,8 +345,23 @@
     panes.forEach(function (p) {
       var showable = ev && !night && p.front && !p.front.querySelector(".cdwrap, .nightwrap");
       if (showable) {
-        p.chip.querySelector(".v").textContent = fmtTime(new Date(ev.at)) + " · " + (ev.title || "").toUpperCase();
+        var vEl = p.chip.querySelector(".v");
+        var txt = fmtTime(new Date(ev.at)) + " · " + (ev.title || "").toUpperCase();
+        if (vEl.getAttribute("data-txt") !== txt) {
+          vEl.setAttribute("data-txt", txt);
+          vEl.innerHTML = "<span>" + esc(txt) + "</span>";
+        }
         p.chip.classList.add("on");
+        /* Long titles shuttle-scroll so the full title is readable (never clipped). */
+        var sp = vEl.firstChild;
+        var over = sp ? sp.scrollWidth - vEl.clientWidth : 0;
+        if (over > 4) {
+          vEl.classList.add("scroll");
+          vEl.style.setProperty("--shuttle-x", (-over) + "px");
+          vEl.style.setProperty("--shuttle-dur", Math.min(14, Math.max(5, over / 25)) + "s");
+        } else {
+          vEl.classList.remove("scroll");
+        }
       } else { p.chip.classList.remove("on"); }
     });
   }
