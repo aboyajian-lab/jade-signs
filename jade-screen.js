@@ -208,7 +208,7 @@
       '<div class="wxwrap">' +
         '<div class="wxbg">' +
           '<i style="background:radial-gradient(46% 38% at 30% 36%,' + tint[0] + ',transparent 68%)"></i>' +
-          '<i style="background:radial-gradient(44% 36% at 70% 66%,' + tint[1] + ',transparent 68%);animation-duration:310s;animation-direction:reverse"></i>' +
+          '<i style="background:radial-gradient(44% 36% at 70% 66%,' + tint[1] + ',transparent 68%);animation-delay:-70s"></i>' +
         '</div>' +
         '<div class="wxvig"></div>' +
         '<div class="wxrain' + (streaks ? " on" : "") + '">' + streaks + '</div>' +
@@ -249,7 +249,7 @@
       var oseq = (cfg.overnight_cards || OVERNIGHT_CARDS).map(function (c) {
         return { k: "night", card: c, dwell: sd };
       });
-      if (kind === "main") oseq.unshift({ k: "page", src: "bounce.html", dwell: (cfg.overnight && cfg.overnight.bounce_seconds) || 120 });
+      if (kind === "main") oseq.unshift({ k: "bounce", dwell: (cfg.overnight && cfg.overnight.bounce_seconds) || 120 });
       return oseq;
     }
     var act = activeSigns(), seq = [], specials = [], si = 0;
@@ -283,16 +283,42 @@
     }
     return out;
   }
+  /* Inline DVD-style bouncer (2026-08-29): replaces the bounce.html iframe in
+     the overnight cycle. The iframe drew the logo via CSS mask + aspect-ratio —
+     either being unsupported on the Rockbot player leaves 2 minutes of pure
+     black. This uses only a plain <img> and transforms, which the daytime
+     rotation already proves work on the player. bounce.html itself is kept
+     for standalone/preview use. */
+  function startBounce(layer) {
+    layer.innerHTML = '<div class="bouncewrap"><img class="blogo" src="' + LOGO + '" alt=""></div>';
+    var logo = layer.querySelector(".blogo");
+    var x = 60, y = 80, vx = 2.6, vy = 2.2;
+    function step() {
+      if (!logo.isConnected) return;               /* layer was recycled — stop */
+      var W = layer.clientWidth, H = layer.clientHeight;
+      var w = logo.offsetWidth, h = logo.offsetHeight;
+      if (W > 0 && w > 0) {
+        x += vx; y += vy;
+        if (x <= 0)     { x = 0;     vx = Math.abs(vx);  }
+        if (x >= W - w) { x = W - w; vx = -Math.abs(vx); }
+        if (y <= 0)     { y = 0;     vy = Math.abs(vy);  }
+        if (y >= H - h) { y = H - h; vy = -Math.abs(vy); }
+        logo.style.transform = "translate(" + x + "px," + y + "px)";
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
   function renderItem(layer, item) {
-    if (item.k === "page") {
-      layer.innerHTML = '<iframe src="' + item.src + '" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000"></iframe>';
+    if (item.k === "bounce") {
+      startBounce(layer);
     } else if (item.k === "img") {
       layer.innerHTML = '<img class="fill' + (item.drift ? " drift" : "") + '" src="' + item.dir + item.f + '" alt="">';
     } else if (item.k === "night") {
       var c = item.card;
       layer.innerHTML =
         '<div class="nightwrap">' +
-          '<div class="nightbg"><i></i><i></i><i></i></div>' +
+          '<div class="nightbg"></div>' +
           '<div class="nightstars">' + starField(80, 7) + '</div>' +
           '<div class="nightcard">' +
             '<div class="k">' + esc(c.kicker) + '</div><div class="r"></div>' +

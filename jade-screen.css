@@ -72,29 +72,31 @@ html, body { margin:0; padding:0; width:100%; height:100%; background:var(--canv
 .chip .v.scroll span { animation:chipshuttle var(--shuttle-dur,8s) ease-in-out 1s infinite alternate; }
 @keyframes chipshuttle { from { transform:translateX(0); } to { transform:translateX(var(--shuttle-x,-30%)); } }
 
-/* ---------- Overnight: seamless dark moving background -------------------- */
-/* Every animation below is a full 360deg rotation on a linear timing function,
-   so the last frame is pixel-identical to the first — no jump, ever. */
-/* No blur filters anywhere here — soft radial gradients are already smooth, and a
-   large blur() is the one effect that will melt a Raspberry Pi. Each layer is a
-   plain rotation, which is GPU-composited and mathematically seamless at 360deg. */
+/* ---------- Overnight: dark background (player-safe rebuild 2026-08-29) --- */
+/* The original three oversized (inset:-45%) gradient layers on continuous
+   rotation rendered BLACK on the Rockbot player — huge composited textures +
+   perpetual rotation are too much for its embedded browser. Player-safe rules:
+   one normal-size element, gradients stacked as multiple backgrounds, motion
+   limited to a small transform drift (ease-in-out alternate = seamless, no
+   jump). No blur(), no masks, no iframes, no oversized layers anywhere in the
+   overnight path — it must run on the weakest renderer in the chain.
+   Original version: jade-signs-site-BACKUP-2026-08-29-pre-rockbot-fix\ */
 .nightwrap { position:absolute; inset:0; overflow:hidden; background:var(--night-bg); }
-.nightbg   { position:absolute; inset:0; z-index:0; overflow:hidden; }
-.nightbg i { position:absolute; inset:-45%; display:block; transform-origin:50% 50%;
-             animation-timing-function:linear; animation-iteration-count:infinite;
-             will-change:transform; }
-.nightbg i:nth-child(1){ background:radial-gradient(45% 38% at 32% 40%, rgba(24,86,92,.55), transparent 68%);
-                         animation-name:spin;  animation-duration:190s; }
-.nightbg i:nth-child(2){ background:radial-gradient(42% 34% at 68% 62%, rgba(12,44,70,.55), transparent 68%);
-                         animation-name:spinr; animation-duration:260s; }
-.nightbg i:nth-child(3){ background:radial-gradient(55% 44% at 55% 28%, rgba(46,32,74,.42), transparent 70%);
-                         animation-name:spin;  animation-duration:330s; }
-@keyframes spin  { from { transform:rotate(0deg);   } to { transform:rotate(360deg);  } }
-@keyframes spinr { from { transform:rotate(360deg); } to { transform:rotate(0deg);    } }
-.nightstars { position:absolute; inset:0; z-index:1; opacity:.5;
-              animation:starturn 600s linear infinite; transform-origin:50% 50%; }
-@keyframes starturn { from { transform:rotate(0deg) scale(1.35); } to { transform:rotate(360deg) scale(1.35); } }
+.nightbg   { position:absolute; inset:-6%; z-index:0;
+             background:
+               radial-gradient(45% 38% at 32% 40%, rgba(24,86,92,.55), transparent 68%),
+               radial-gradient(42% 34% at 68% 62%, rgba(12,44,70,.55), transparent 68%),
+               radial-gradient(55% 44% at 55% 28%, rgba(46,32,74,.42), transparent 70%);
+             animation:nightdrift 140s ease-in-out infinite alternate; }
+@keyframes nightdrift { from { transform:translate(-1.2%,-0.8%); }
+                        to   { transform:translate(1.2%,0.8%);   } }
+.nightstars { position:absolute; inset:0; z-index:1; opacity:.5; }
 .nightstars b { position:absolute; background:#9FB6BD; border-radius:50%; }
+/* inline DVD-style bouncer (replaces the bounce.html iframe overnight —
+   plain <img> + transform only; no CSS mask, no aspect-ratio dependency) */
+.bouncewrap { position:absolute; inset:0; overflow:hidden; background:#000; }
+.bouncewrap .blogo { position:absolute; left:0; top:0; width:17%; opacity:.92;
+                     will-change:transform; }
 /* anti burn-in: whole card creeps a few px and returns to exactly where it began */
 .nightcard { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column;
              align-items:center; justify-content:center; text-align:center;
@@ -115,8 +117,9 @@ html, body { margin:0; padding:0; width:100%; height:100%; background:var(--canv
 .wxbg   { position:absolute; inset:0; z-index:0; overflow:hidden; }
 .wxvig  { position:absolute; inset:0; z-index:1; pointer-events:none;
           background:radial-gradient(120% 90% at 50% 45%, transparent 30%, rgba(0,0,0,.62) 100%); }
-.wxbg i { position:absolute; inset:-45%; transform-origin:50% 50%; will-change:transform;
-          animation:spin 240s linear infinite; }
+/* same player-safe treatment as .nightbg — static gradient, small drift only */
+.wxbg i { position:absolute; inset:-6%;
+          animation:nightdrift 140s ease-in-out infinite alternate; }
 .wxrain { position:absolute; inset:0; z-index:1; opacity:0; overflow:hidden; }
 .wxrain.on { opacity:.5; }
 .wxrain s { position:absolute; top:-12%; width:1.5px; height:9%;
