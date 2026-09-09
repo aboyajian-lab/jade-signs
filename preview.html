@@ -6,44 +6,69 @@
 <title>Jade Big Screen — Preview</title>
 <!-- View-only preview of what the courtyard screen has in rotation at any moment.
      Reads the same playlist.json the screen reads. Does NOT control the screen.
-     Mirrors the scheduling semantics in jade-screen.js — if those change there, change here. -->
+     Scheduling semantics come from jade-sched.js — the SAME file the live player
+     loads — so chip / countdown / overnight decisions here are the screen's, not a
+     hand-mirrored copy. Build: v3 · 2026-09-07 (Showrunner QA fix brief). -->
 <style>
   :root {
-    --jade:  #5CE1E6; --cream: #EEEBE9; --muted: #93A2A8; --gold: #E9B949;
-    --alert: #E11D2A; --bg: #060809; --card: #101416; --line: rgba(238,235,233,.14);
+    --jade:  #5CE1E6;
+    --cream: #EEEBE9;
+    --muted: #93A2A8;
+    --gold:  #E9B949;
+    --alert: #E11D2A;
+    --bg:    #060809;
+    --card:  #101416;
+    --line:  rgba(238,235,233,.14);
     --ui: 'Segoe UI', Verdana, Arial, Helvetica, sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin:0; padding:0; background:var(--bg); color:var(--cream); font-family:var(--ui); }
   .wrap { max-width:1100px; margin:0 auto; padding:16px 14px 60px; }
+
   header { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
   header img { height:34px; opacity:.9; }
   header .t { font-size:14px; letter-spacing:.28em; font-weight:700; color:var(--jade); }
   header .sub { font-size:12px; color:var(--muted); letter-spacing:.06em; width:100%; }
+
   .tabs { display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
   .tabs button { background:transparent; color:var(--muted); border:0; padding:10px 20px;
                  font-weight:700; font-size:14px; cursor:pointer; font-family:var(--ui); }
   .tabs button.active { background:rgba(92,225,230,.16); color:var(--jade); }
+
   .timebar { display:flex; align-items:center; gap:10px; margin:14px 0 4px; flex-wrap:wrap; }
   .timebar .lbl { font-size:10.5px; letter-spacing:.22em; color:var(--muted); font-weight:700; }
-  .timebar input[type=datetime-local] { background:var(--card); color:var(--cream); border:1px solid var(--line);
+  .timebar input[type=datetime-local] {
+    background:var(--card); color:var(--cream); border:1px solid var(--line);
     border-radius:8px; padding:9px 10px; font-family:var(--ui); font-size:15px; }
   .nowlink { background:none; border:0; color:var(--jade); font-size:13px; cursor:pointer;
              text-decoration:underline; font-family:var(--ui); padding:4px; }
+  .tz { font-size:11px; color:var(--muted); letter-spacing:.08em; border:1px solid var(--line);
+        border-radius:6px; padding:4px 8px; }
+  .tz b { color:var(--cream); font-weight:600; }
+  .tz.warn { border-color:rgba(225,29,42,.5); color:#ff8a93; }
+
   .modebar { border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin:12px 0 18px;
              display:flex; gap:10px; align-items:flex-start; background:var(--card); }
   .modebar .dot { width:10px; height:10px; border-radius:50%; margin-top:5px; flex:0 0 auto; }
   .modebar .k { font-size:12px; letter-spacing:.24em; font-weight:700; }
   .modebar .d { font-size:13px; color:var(--muted); margin-top:3px; line-height:1.45; }
+  .modebar .d b { color:var(--cream); font-weight:600; }
   .m-normal    .dot { background:var(--jade); }  .m-normal    .k { color:var(--jade); }
   .m-countdown .dot { background:var(--gold); }  .m-countdown .k { color:var(--gold); }
+  .m-live      .dot { background:var(--alert); } .m-live      .k { color:#ff8a93; }
   .m-overnight .dot { background:#7f8fd0; }      .m-overnight .k { color:#9fb0e8; }
+
   .chipnote { display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(92,225,230,.45);
-              border-radius:99px; padding:6px 14px; font-size:12.5px; margin:0 0 16px; background:rgba(4,6,7,.6); }
+              border-radius:99px; padding:6px 14px; font-size:12.5px; margin:0 12px 16px 0;
+              background:rgba(4,6,7,.6); }
   .chipnote b { color:var(--jade); letter-spacing:.2em; font-size:11px; font-weight:700; }
+  .chipnote.off { border-color:var(--line); color:var(--muted); }
+  .chipnote.off b { color:var(--muted); }
+
   h2 { font-size:12px; letter-spacing:.26em; color:var(--muted); font-weight:700;
        margin:22px 0 10px; text-transform:uppercase; }
   h2 span { color:var(--cream); }
+
   .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:12px; }
   .grid.small { grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); }
   .sign { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden;
@@ -54,16 +79,20 @@
   .sign .ti { font-size:13.5px; font-weight:700; line-height:1.25; }
   .sign .th { font-size:11.5px; color:var(--muted); margin-top:3px; }
   .sign .when { font-size:11.5px; color:var(--jade); margin-top:5px; font-weight:600; }
+  .sign .when.past { color:var(--muted); font-weight:500; }
   .sign .until { font-size:10.5px; color:var(--muted); margin-top:2px; }
   .sign.expired { opacity:.42; }
   .sign.expired .when { color:var(--muted); }
   a.sign.tap:hover { border-color:rgba(92,225,230,.5); }
   .badge { display:inline-block; font-size:9.5px; letter-spacing:.14em; font-weight:700;
-           padding:2px 7px; border-radius:4px; margin-bottom:5px; }
+           padding:2px 7px; border-radius:4px; margin:0 3px 5px 0; }
   .badge.sports { background:rgba(225,29,42,.18); color:#ff8a93; }
   .badge.movie  { background:rgba(92,225,230,.14); color:var(--jade); }
+  .badge.series { background:rgba(233,185,73,.16); color:var(--gold); }
   .badge.today  { background:var(--gold); color:#000; }
   .badge.exp    { background:rgba(147,162,168,.18); color:var(--muted); }
+
+  /* mini renders of the live overnight cards */
   .nightmini { aspect-ratio:16/9; display:flex; flex-direction:column; align-items:center;
                justify-content:center; text-align:center; gap:7px; padding:12px;
                background:radial-gradient(85% 95% at 32% 28%, #0f3237 0%, #050708 72%); }
@@ -72,6 +101,7 @@
   .nightmini .ns { font-size:10.5px; color:var(--muted); line-height:1.4; }
   .bouncebox { aspect-ratio:16/9; background:#000; display:flex; align-items:center; justify-content:center; }
   .bouncebox img { width:40%; opacity:.92; }
+
   .empty { color:var(--muted); font-size:13.5px; padding:8px 2px; }
   .note { color:var(--muted); font-size:11.5px; margin-top:10px; line-height:1.5; }
   footer { margin-top:34px; font-size:11px; color:var(--muted); line-height:1.6; }
@@ -84,107 +114,117 @@
     <div class="t">BIG SCREEN PREVIEW</div>
     <div class="sub">What the courtyard screen has in rotation at any moment. View-only — this page never changes the screen.</div>
   </header>
+
   <div class="tabs">
     <button id="tabTime">Rotation</button>
     <button id="tabAll">All signs</button>
   </div>
+
   <div class="timebar" id="timebar">
     <span class="lbl">SHOWING AS OF</span>
     <input type="datetime-local" id="when">
     <button class="nowlink" id="nowbtn">reset to now</button>
+    <span class="tz" id="tz"></span>
   </div>
+
   <div id="out"></div>
+
   <footer>
-    Reads the live <code>playlist.json</code> (same file the screen reads, refreshed on load).
-    Times are your device's local time. Rotation order on the real screen is not fixed —
-    this shows the <em>pool</em> of signs in rotation, not a frame-by-frame simulation.
+    Reads the live <code>playlist.json</code> (same file the screen reads, refreshed on load) and decides
+    what is featured with <code>jade-sched.js</code> — the same module the screen runs, so this page cannot
+    drift from it. <b>All times are venue time (America/New_York)</b>, whatever your device is set to.
+    Rotation order on the real screen is not fixed — this shows the <em>pool</em> of signs in rotation,
+    not a frame-by-frame simulation.<br>
+    Rules: the featured event is today's next start, else today's most recent start (kept until overnight);
+    the corner chip and the countdown card both follow it. Once an event starts, its card switches to
+    SHOWTIME / GAME TIME (no timer) for the rest of that day. Sports events use the broadcast look
+    (red kicker block, gold-bordered timer cells). Series signs (Saturdays, Sundays, Mon/Thu) count down
+    to each real airing but stay one card. <span id="build"></span>
   </footer>
 </div>
+
+<script src="jade-sched.js?v=1"></script>
 <script>
 (function () {
+  var S = window.JadeSched;
+  var BUILD = "preview v3 · 2026-09-07";
   var data = null, view = "time";
   var out = document.getElementById("out");
   var whenEl = document.getElementById("when");
-  function pad(n) { return String(n).padStart(2, "0"); }
+  document.getElementById("build").textContent = BUILD + ".";
+
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
     return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
-  function dstr(d) { return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
-  function toLocalInput(d) { return dstr(d) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
-  function fmtTime(t) { return (t.getHours() % 12 || 12) + ":" + pad(t.getMinutes()) + " " + (t.getHours() >= 12 ? "PM" : "AM"); }
-  function fmtStamp(t) {
-    var DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    var MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return DN[t.getDay()] + ", " + MN[t.getMonth()] + " " + t.getDate() + " · " + fmtTime(t);
-  }
-  function fmtWhen(s) { return fmtStamp(new Date(s.at)); }
   function isSport(s) { return s.kind === "sports"; }
   function cfg() { return (data && data.config) || {}; }
-  function activeSigns(T) {
-    var t = dstr(T);
-    return (data.signs || []).filter(function (s) { return s.start <= t && t <= s.end; });
+  function signs() { return (data && data.signs) || []; }
+  /* The picker value is read as venue (ET) wall-clock, exactly the form the schedule uses. */
+  function T() { return (whenEl.value || S.nowWall()).slice(0, 16); }
+  function stampOf(w) { return S.fmtStamp(w, true); }
+  function tzLabel() {
+    var el = document.getElementById("tz");
+    if (S.TZ_OK) { el.innerHTML = 'Times: <b>' + esc(S.TZ) + '</b> (venue)'; el.className = "tz"; }
+    else { el.innerHTML = 'Times: device clock — this browser cannot convert to ' + esc(S.TZ); el.className = "tz warn"; }
   }
-  function inOvernight(T) {
-    var o = cfg().overnight || {}; if (!o.start || !o.end) return false;
-    var cur = pad(T.getHours()) + ":" + pad(T.getMinutes());
-    return o.start > o.end ? (cur >= o.start || cur < o.end) : (cur >= o.start && cur < o.end);
-  }
-  function nextEvent(T) {
-    var best = null;
-    (data.signs || []).forEach(function (s) {
-      if (!s.at) return;
-      var t = new Date(s.at);
-      if (t > T && (!best || t < new Date(best.at))) best = s;
-    });
-    if (!best) return null;
-    var lead = (cfg().countdown && cfg().countdown.lead_hours) || 36;
-    if ((new Date(best.at) - T) / 36e5 > lead) return null;
-    return best;
-  }
-  function eventOnDay(T) {
-    var best = null;
-    (data.signs || []).forEach(function (s) {
-      if (!s.at) return;
-      var t = new Date(s.at);
-      if (t.toDateString() === T.toDateString() && (!best || t < new Date(best.at))) best = s;
-    });
-    return best;
-  }
-  function upcoming(T, n) {
-    return (data.signs || []).filter(function (s) { return s.at && new Date(s.at) > T; })
-      .sort(function (a, b) { return String(a.at).localeCompare(String(b.at)); }).slice(0, n);
-  }
-  function signCard(s, T, opts) {
+
+  function signCard(s, now, opts) {
     opts = opts || {};
-    var expired = opts.allView && dstr(T) > s.end;
-    var isToday = s.at && new Date(s.at).toDateString() === T.toDateString();
+    var times = S.timesOf(s), d = S.dateOf(now);
+    var expired = opts.allView && d > s.end;
+    var onDay = times.some(function (t) { return S.dateOf(t) === d; });
+    var next = S.nextAiring(s, now);
     var b = "";
-    if (expired) b = '<span class="badge exp">EXPIRED</span> ';
-    else if (isToday && !opts.allView) b = '<span class="badge today">THIS DAY</span> ';
+    if (expired) b += '<span class="badge exp">EXPIRED</span>';
+    else if (onDay && !opts.allView) b += '<span class="badge today">THIS DAY</span>';
     b += isSport(s) ? '<span class="badge sports">SPORTS</span>' : '<span class="badge movie">MOVIE</span>';
+    if (s.series) b += '<span class="badge series">SERIES</span>';
+    var when = "";
+    if (s.series || times.length > 1) {
+      /* Series / multi-airing sign: describe the cadence, never a one-shot stamp. */
+      when += '<div class="when">' + esc(s.cadence || (times.length + " airings")) + '</div>';
+      if (next) when += '<div class="until">next: ' + esc(S.fmtStamp(next)) + (s.cadence ? ' · ' + times.length + ' airings' : '') + '</div>';
+      else if (times.length) when += '<div class="until">last airing ' + esc(S.fmtStamp(times[times.length - 1])) + '</div>';
+    } else if (times.length) {
+      var past = times[0] <= now && !opts.allView;
+      when += '<div class="when' + (past ? " past" : "") + '">' + esc(S.fmtStamp(times[0])) + (past ? ' · started' : '') + '</div>';
+    }
     return '<div class="sign' + (expired ? " expired" : "") + '">' +
       '<img class="art" loading="lazy" src="signs/main_signs/' + esc(s.file) + '" alt="">' +
       '<div class="meta">' + b +
       '<div class="ti">' + esc(s.title) + '</div>' +
-      '<div class="th">' + esc(s.theme || "") + '</div>' +
-      (s.at ? '<div class="when">' + esc(fmtWhen(s)) + '</div>' : '') +
+      '<div class="th">' + esc(s.theme || "") + '</div>' + when +
       '<div class="until">on screen through ' + esc(s.end) + '</div>' +
+      '</div></div>';
+  }
+  function instCard(i, now) {
+    /* one upcoming instance (used in the overnight "next on the big screen" list) */
+    var s = i.sign;
+    return '<div class="sign">' +
+      '<img class="art" loading="lazy" src="signs/main_signs/' + esc(s.file) + '" alt="">' +
+      '<div class="meta">' + (isSport(s) ? '<span class="badge sports">SPORTS</span>' : '<span class="badge movie">MOVIE</span>') +
+      (s.series ? '<span class="badge series">SERIES</span>' : '') +
+      '<div class="ti">' + esc(s.title) + '</div>' +
+      '<div class="th">' + esc(s.theme || "") + '</div>' +
+      '<div class="when">' + esc(S.fmtStamp(i.at)) + '</div>' +
       '</div></div>';
   }
   function bannerCard(dir, f, side) {
     return '<div class="sign' + (side ? ' side' : '') + '"><img class="art" loading="lazy" src="' + dir + esc(f) + '" alt=""></div>';
   }
+
   function renderTime() {
-    var T = whenEl.value ? new Date(whenEl.value) : new Date();
-    var stamp = fmtStamp(T).toUpperCase();
+    var now = T();
+    var stamp = stampOf(now);
     var h = "";
-    if (inOvernight(T)) {
+
+    if (S.inOvernight(cfg(), now)) {
       var oc = data.overnight_cards || [];
       var o = cfg().overnight || {};
       h += '<div class="modebar m-overnight"><div class="dot"></div><div>' +
            '<div class="k">OVERNIGHT MODE · ' + esc(stamp) + '</div>' +
            '<div class="d">Runs ' + esc(o.start || "22:00") + '–' + esc(o.end || "06:00") +
-           '. The cycle below repeats all night: the bouncing Jade logo (~' +
-           Math.round((o.bounce_seconds || 120) / 60) + ' min), then each night card on the moving dark background.</div>' +
+           ' venue time. The cycle below repeats all night: the bouncing Jade logo (~' +
+           Math.round((o.bounce_seconds || 120) / 60) + ' min), then each night card on the moving dark background. No chip, no countdown.</div>' +
            '</div></div>';
       h += '<h2>Overnight rotation</h2><div class="grid">';
       h += '<a class="sign tap" href="bounce.html" target="_blank" rel="noopener">' +
@@ -199,51 +239,77 @@
              '</div><div class="meta"><div class="th">Live night card (rendered by the screen, not a PNG)</div></div></div>';
       });
       h += '</div>';
-      var ups = upcoming(T, 3);
+      var ups = S.upcoming(signs(), now, 3);
       if (ups.length) {
         h += '<h2>Next on the big screen</h2><div class="grid">' +
-             ups.map(function (s) { return signCard(s, T); }).join("") + '</div>' +
+             ups.map(function (i) { return instCard(i, now); }).join("") + '</div>' +
              '<div class="note">Shown here for reference — the overnight cycle itself does not advertise upcoming events (yet).</div>';
       }
       out.innerHTML = h; return;
     }
-    var act = activeSigns(T);
-    var ev = nextEvent(T);
-    var chipEv = eventOnDay(T);
-    if (ev) {
+
+    var act = S.activeSigns(signs(), now);
+    var cd = S.countdown(signs(), cfg(), now);       /* same call the screen makes */
+    var ch = S.chip(signs(), now);
+    var lead = (cfg().countdown && cfg().countdown.lead_hours) || 36;
+
+    if (cd && cd.state === "live") {
+      h += '<div class="modebar m-live"><div class="dot"></div><div>' +
+           '<div class="k">' + (isSport(cd.sign) ? 'GAME TIME' : 'SHOWTIME') + ' · ' + esc(stamp) + '</div>' +
+           '<div class="d"><b>' + esc(cd.sign.title) + '</b> started ' + (S.dayWord(cd.at, now) === "TONIGHT" ? "tonight" : "today") + ' at ' + esc(S.fmtTime(cd.at)) +
+           '. Its card stays in rotation on both zones with the timer hidden (kicker reads ' +
+           (isSport(cd.sign) ? 'GAME TIME' : 'SHOWTIME') + ' ON THE BIG SCREEN) until overnight; the next countdown begins tomorrow morning.' +
+           (isSport(cd.sign) ? ' Sports use the broadcast look: red kicker block, gold-bordered cells.' : '') + '</div></div></div>';
+    } else if (cd) {
+      var hrs = S.hoursUntil(cd.at, now);
       h += '<div class="modebar m-countdown"><div class="dot"></div><div>' +
-           '<div class="k">COUNTDOWN ACTIVE · ' + esc(stamp) + (isSport(ev) ? ' · BROADCAST VARIANT' : '') + '</div>' +
-           '<div class="d">A live countdown card to <b style="color:var(--cream)">' + esc(ev.title) + '</b> (' + esc(fmtWhen(ev)) +
-           ') is interleaved into the rotation on both zones.</div></div></div>';
+           '<div class="k">COUNTDOWN ACTIVE · ' + esc(stamp) + '</div>' +
+           '<div class="d">A live countdown card to <b>' + esc(cd.sign.title) + '</b> (' + esc(S.fmtWhen(cd.at, now)) +
+           ', ' + (hrs < 1 ? Math.round(hrs * 60) + ' min' : hrs.toFixed(1).replace(/\.0$/, '') + ' h') + ' away) is interleaved into the rotation on both zones.' +
+           (isSport(cd.sign) ? ' Sports use the broadcast look: red UP NEXT block, gold-bordered timer cells.' : '') + '</div></div></div>';
     } else {
+      var f = S.featured(signs(), now);
       h += '<div class="modebar m-normal"><div class="dot"></div><div>' +
            '<div class="k">NORMAL ROTATION · ' + esc(stamp) + '</div>' +
            '<div class="d">Event signs below rotate with evergreen signs' + ((cfg().weather||{}).enabled ? ' and the live weather card' : '') +
-           ' every ' + (cfg().dwell_seconds || 12) + 's. No countdown within ' + ((cfg().countdown&&cfg().countdown.lead_hours)||36) + 'h of the next event.</div></div></div>';
+           ' every ' + (cfg().dwell_seconds || 12) + 's. No countdown: ' +
+           (f ? 'next event <b>' + esc(f.sign.title) + '</b> (' + esc(S.fmtStamp(f.at)) + ') is more than ' + lead + 'h out.' : 'nothing scheduled ahead.') +
+           '</div></div></div>';
     }
-    if (chipEv) {
-      h += '<div class="chipnote"><b>TONIGHT CHIP</b> ' + esc(fmtTime(new Date(chipEv.at))) + ' · ' + esc(chipEv.title.toUpperCase()) +
-           (ev ? ' (hidden while countdown/overnight cards show)' : '') + '</div>';
+    if (ch) {
+      h += '<div class="chipnote"><b>' + esc(S.dayWord(ch.at, now) || "TODAY") + ' CHIP</b> ' + esc(S.fmtTime(ch.at)) + ' · ' + esc(ch.sign.title.toUpperCase()) +
+           ' <span style="color:var(--muted)">(hidden while the countdown card is up)</span></div>';
+    } else {
+      h += '<div class="chipnote off"><b>NO CHIP</b> nothing scheduled today</div>';
     }
+
     h += '<h2>Event signs in rotation <span>(' + act.length + ')</span></h2>';
     h += act.length
-      ? '<div class="grid">' + act.map(function (s) { return signCard(s, T); }).join("") + '</div>'
+      ? '<div class="grid">' + act.map(function (s) { return signCard(s, now); }).join("") + '</div>'
       : '<div class="empty">No event signs active on this date — the screen shows evergreens' + ((cfg().weather||{}).enabled ? ' + weather' : '') + ', or the Jade fallback card if nothing at all is active.</div>';
+
     h += '<h2>Also in rotation — main zone</h2><div class="grid small">' +
          (data.general_mains || []).map(function (f) { return bannerCard("signs/general_mains/", f, false); }).join("") +
          ((cfg().weather||{}).enabled ? '<div class="sign"><div class="meta"><div class="ti">Live weather card</div><div class="th">Open-Meteo · Winter Haven · every ' + ((cfg().weather||{}).every_n||4) + 'th slot</div></div></div>' : '') +
          '</div>';
+
     h += '<h2>Also in rotation — sidebar</h2><div class="grid small">' +
          (data.general_banners || []).map(function (f) { return bannerCard("signs/general_banners/", f, true); }).join("") + '</div>';
+
     out.innerHTML = h;
   }
+
   function renderAll() {
-    var T = new Date();
-    var all = (data.signs || []).slice().sort(function (a, b) { return String(a.at).localeCompare(String(b.at)); });
+    var now = S.nowWall();
+    var all = signs().slice().sort(function (a, b) {
+      var x = (S.timesOf(a)[0] || a.end), y = (S.timesOf(b)[0] || b.end);
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
     var h = '<h2>Every sign in the playlist <span>(' + all.length + ')</span></h2>' +
-            '<div class="grid">' + all.map(function (s) { return signCard(s, T, { allView: true }); }).join("") + '</div>';
+            '<div class="grid">' + all.map(function (s) { return signCard(s, now, { allView: true }); }).join("") + '</div>';
     out.innerHTML = h;
   }
+
   function render() {
     document.getElementById("tabTime").className = (view === "time" ? "active" : "");
     document.getElementById("tabAll").className = (view === "all" ? "active" : "");
@@ -251,15 +317,19 @@
     if (!data) { out.innerHTML = '<div class="empty">Loading playlist…</div>'; return; }
     if (view === "time") renderTime(); else renderAll();
   }
-  whenEl.value = toLocalInput(new Date());
+
+  tzLabel();
+  whenEl.value = S.nowWall();                       /* venue "now", not device "now" */
   whenEl.addEventListener("change", render);
-  document.getElementById("nowbtn").addEventListener("click", function () { whenEl.value = toLocalInput(new Date()); render(); });
+  document.getElementById("nowbtn").addEventListener("click", function () { whenEl.value = S.nowWall(); render(); });
   document.getElementById("tabTime").addEventListener("click", function () { view = "time"; render(); });
   document.getElementById("tabAll").addEventListener("click", function () { view = "all"; render(); });
+
   fetch("playlist.json?t=" + Date.now(), { cache: "no-store" })
     .then(function (r) { return r.json(); })
     .then(function (d) { data = d; render(); })
     .catch(function () { out.innerHTML = '<div class="empty">Could not load playlist.json.</div>'; });
+
   render();
 })();
 </script>

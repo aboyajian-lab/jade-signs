@@ -53,6 +53,11 @@ html, body { margin:0; padding:0; width:100%; height:100%; background:var(--canv
 .cdclock.sport .cdseg + .cdseg { border-left:1px solid rgba(233,185,73,.45); padding-left:1.8vh; }
 .cdclock.sport .cdlab { color:var(--gold); }
 .cdclock.sport .cdnum { font-size:11vh; }
+/* started state (SHOWTIME / GAME TIME): same card, no timer — the when-line
+   carries the scheduled start. Grace = rest of the event day (jade-sched.js). */
+.cdwrap.live .cdclock { display:none; }
+.cdwrap.live .cdt { font-size:7.4vh; }
+.cdwrap.live .cdwhen { font-size:3.6vh; }
 
 /* ---------- "Tonight" chip (corner overlay on event days) ----------------- */
 .chip { position:absolute; top:3.4%; right:2.6%; z-index:6; display:none; align-items:center;
@@ -171,6 +176,7 @@ html, body { margin:0; padding:0; width:100%; height:100%; background:var(--canv
 .narrow .cdclock.sport .cdseg:nth-child(even) { border-left:1px solid rgba(233,185,73,.45); }
 .narrow .cdlab { font-size:1.5vh; letter-spacing:.22em; }
 .narrow .cdk { font-size:1.7vh; letter-spacing:.24em; } .narrow .cdwhen { font-size:2.2vh; }
+.narrow .cdwrap.live .cdt { font-size:4.4vh; } .narrow .cdwrap.live .cdwhen { font-size:2.5vh; }
 .narrow .cdlogo { height:7vh; }
 .narrow .nightcard h1 { font-size:5.6vh; } .narrow .nightcard p { font-size:2.2vh; }
 /* top padding leaves room for the Tonight chip, which sits above this card */

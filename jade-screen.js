@@ -4,11 +4,14 @@
      var PANE_DEFS = [{ sel: "#p-main", kind: "main" }];
    Everything else — rotation, transitions, countdown, Tonight chip, overnight
    and weather — lives here so the three pages can never drift apart again.
+   Scheduling semantics (what is featured / counting down / overnight, venue
+   time zone) live in jade-sched.js, shared with preview.html — load it first.
    ========================================================================== */
 (function () {
+  var S = window.JadeSched;
   var DIRS = {
-    main: { sign: "signs/main_signs/", general: "signs/general_mains/", overnight: "signs/overnight/" },
-    side: { sign: "signs/side_banners/", general: "signs/general_banners/", overnight: "signs/overnight_side/" }
+    main: { sign: "signs/main_signs/", general: "signs/general_mains/" },
+    side: { sign: "signs/side_banners/", general: "signs/general_banners/" }
   };
   var LOGO = "assets/jade_logo_cream.png?v=2";
 
@@ -27,13 +30,21 @@
     { kicker: "10 PM – 6 AM",          title: "QUIET\nHOURS",      sub: "Please be respectful\nof your neighbors." }
   ];
 
-  var data = { signs: [], general_mains: [], general_banners: [], overnight_mains: [], overnight_banners: [] };
+  /* Overnight cards are live HTML (overnight_cards) — the old overnight_mains /
+     overnight_banners PNG lists were never read and are no longer in the schema. */
+  var data = { signs: [], general_mains: [], general_banners: [] };
   var wx = null, wxAt = 0;
   var idx = 0, tcount = 0, lastMode = null, curDwell = 0;
   var q = location.search;
   var DEMO_CD = q.indexOf("demo=countdown") >= 0,
+      DEMO_ST = q.indexOf("demo=showtime") >= 0,     /* countdown card in its started state */
       DEMO_NIGHT = q.indexOf("demo=overnight") >= 0,
       DEMO_WX = q.indexOf("demo=weather") >= 0;
+  /* QA time travel: ?at=2026-09-05T15:00 (venue time) runs the whole page as if it
+     were that moment — rotation, chip, countdown state, overnight. Never set on the
+     Rockbot URL. Combine with demo=countdown to put the featured card first. */
+  var AT = /[?&]at=(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/.exec(q);
+  if (AT) S.setNow(AT[1]);
   var EASE = "cubic-bezier(.22,.61,.36,1)";
 
   var panes = (window.PANE_DEFS || []).map(function (p) {
@@ -57,57 +68,29 @@
   window.addEventListener("resize", markNarrow);
 
   /* ---------- helpers ---------------------------------------------------- */
-  function pad(n) { return String(n).padStart(2, "0"); }
+  /* All schedule decisions run on the venue clock (America/New_York) via
+     jade-sched.js — never on the device clock. See that file for the rules. */
+  var pad = S.pad;
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
     return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
-  function todayStr() { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
-  function activeSigns() {
-    var t = todayStr();
-    return (data.signs || []).filter(function (s) { return s.start <= t && t <= s.end; });
-  }
+  function now() { return S.nowWall(); }                     /* "YYYY-MM-DDTHH:MM" in ET */
+  function activeSigns() { return S.activeSigns(data.signs, now()); }
   function isSport(s) {
     if (s.kind) return s.kind === "sports";
     return /🏈|🏀|⚾|🏒|⚽|🏎|⛳|🥊|🎾/.test(s.theme || "");
   }
   function inOvernight() {
     if (DEMO_NIGHT) return true;
-    var o = cfg.overnight || {}; if (!o.start || !o.end) return false;
-    var d = new Date(), cur = pad(d.getHours()) + ":" + pad(d.getMinutes());
-    return o.start > o.end ? (cur >= o.start || cur < o.end) : (cur >= o.start && cur < o.end);
+    return S.inOvernight(cfg, now());
   }
-  function nextEvent() {
-    var now = new Date(), best = null;
-    (data.signs || []).forEach(function (s) {
-      if (!s.at) return;
-      var t = new Date(s.at);
-      if (t > now && (!best || t < new Date(best.at))) best = s;
-    });
-    if (!best) return null;
-    if (!DEMO_CD) {
-      var hrs = (new Date(best.at) - now) / 36e5;
-      if (hrs > ((cfg.countdown && cfg.countdown.lead_hours) || 36)) return null;
-    }
-    return best;
+  /* Featured event for the countdown card: { sign, at, state: upcoming|live } or null.
+     Demo modes ignore the lead window; demo=showtime forces the started state. */
+  function countdownTarget() {
+    var f = S.countdown(data.signs, cfg, now(), DEMO_CD || DEMO_ST);
+    if (f && DEMO_ST) f = { sign: f.sign, at: f.at, state: "live", today: true };
+    return f;
   }
-  function eventToday() {
-    var now = new Date(), best = null;
-    (data.signs || []).forEach(function (s) {
-      if (!s.at) return;
-      var t = new Date(s.at);
-      if (t.toDateString() === now.toDateString() && (!best || t < new Date(best.at))) best = s;
-    });
-    return best;
-  }
-  function fmtTime(t) {
-    return (t.getHours() % 12 || 12) + ":" + pad(t.getMinutes()) + " " + (t.getHours() >= 12 ? "PM" : "AM");
-  }
-  function fmtWhen(s) {
-    var t = new Date(s.at), now = new Date();
-    if (t.toDateString() === now.toDateString()) return "TONIGHT · " + fmtTime(t);
-    var DN = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
-    var MN = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-    return DN[t.getDay()] + ", " + MN[t.getMonth()] + " " + t.getDate() + " · " + fmtTime(t);
-  }
+  function chipTarget() { return S.chip(data.signs, now()); }
 
   /* ---------- weather ----------------------------------------------------- */
   /* Open-Meteo: free, no API key, no attribution requirement for non-commercial. */
@@ -152,20 +135,22 @@
       .then(function (d) { if (d && d.current) { wx = d; wxAt = Date.now(); } })
       .catch(function () {});
   }
+  /* Open-Meteo is called with timezone=auto, so its time strings are venue
+     wall-clock (America/New_York) — parse them with the same ET helpers. */
   function rainCallout(d) {
-    var h = d.hourly || {}, times = h.time || [], now = Date.now();
+    var h = d.hourly || {}, times = h.time || [], nowMs = S.nowMs();
     if ((d.current.precipitation || 0) > 0) return "Raining now";
     for (var i = 0; i < times.length; i++) {
-      var t = new Date(times[i]);
-      if (t < now) continue;
-      var ahead = (t - now) / 36e5;
+      var t = S.toInstant(times[i]);
+      if (t < nowMs) continue;
+      var ahead = (t - nowMs) / 36e5;
       if (ahead > 12) break;
       var p = (h.precipitation_probability || [])[i] || 0;
       var code = (h.weather_code || [])[i];
       var wet = p >= 55 || (code >= 61 && code <= 82) || code >= 95;
       if (wet) {
         if (ahead < 1.5) return "Rain likely within the hour";
-        var hr = t.getHours();
+        var hr = S.hourOf(times[i]);
         return "Rain likely around " + (hr % 12 || 12) + " " + (hr >= 12 ? "PM" : "AM");
       }
     }
@@ -175,18 +160,17 @@
     if (!wx) return null;
     var w = cfg.weather || {}, c = wx.current, h = wx.hourly || {}, dd = wx.daily || {};
     var m = wmo(c.weather_code), kind = m[0];
-    var now = Date.now(), hrs = [], times = h.time || [];
+    var nowMs = S.nowMs(), hrs = [], times = h.time || [];
     for (var i = 0; i < times.length && hrs.length < 4; i++) {
-      var t = new Date(times[i]);
-      if (t - now < 30 * 60000) continue;
+      var t = S.toInstant(times[i]);
+      if (t - nowMs < 30 * 60000) continue;
       var p = (h.precipitation_probability || [])[i] || 0, hc = (h.weather_code || [])[i];
-      hrs.push({ t: t, temp: Math.round((h.temperature_2m || [])[i]), code: hc, p: p,
+      hrs.push({ hr: S.hourOf(times[i]), temp: Math.round((h.temperature_2m || [])[i]), code: hc, p: p,
                  wet: p >= 55 || (hc >= 61 && hc <= 82) || hc >= 95 });
     }
     var DN = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
     var days = (dd.time || []).slice(1, 6).map(function (ds, i) {
-      var t = new Date(ds + "T12:00");
-      return { d: DN[t.getDay()], code: dd.weather_code[i+1],
+      return { d: DN[S.dow(ds)], code: dd.weather_code[i+1],
                hi: Math.round(dd.temperature_2m_max[i+1]), lo: Math.round(dd.temperature_2m_min[i+1]) };
     });
     var call = rainCallout(wx);
@@ -226,7 +210,7 @@
           '<div class="wxside">' +
             '<div class="wxhrs">' + hrs.map(function (x) {
               return '<div class="wxhr' + (x.wet ? " wet" : "") + '">' +
-                       '<div class="t">' + (x.t.getHours() % 12 || 12) + (x.t.getHours() >= 12 ? "P" : "A") + '</div>' +
+                       '<div class="t">' + (x.hr % 12 || 12) + (x.hr >= 12 ? "P" : "A") + '</div>' +
                        '<div class="g">' + icon(wmo(x.code)[0]) + '</div>' +
                        '<div class="v">' + x.temp + '&deg;</div></div>';
             }).join("") + '</div>' +
@@ -253,8 +237,8 @@
       return oseq;
     }
     var act = activeSigns(), seq = [], specials = [], si = 0;
-    var ev = nextEvent();
-    if (ev) specials.push({ k: "cd", ev: ev, art: DIRS[kind].sign });
+    var f = countdownTarget();
+    if (f) specials.push({ k: "cd", ev: f.sign, at: f.at, state: f.state, art: DIRS[kind].sign });
     if (kind === "main") {
       (data.general_mains || []).forEach(function (f) { specials.push({ k: "img", dir: DIRS.main.general, f: f }); });
     } else {
@@ -262,7 +246,7 @@
     }
     if ((cfg.weather || {}).enabled && wx) specials.push({ k: "wx", dwell: (cfg.weather.dwell_seconds || 14) });
     var n = (kind === "main" ? (cfg.countdown && cfg.countdown.every_n) : cfg.general_every_n) || 3;
-    if (DEMO_CD && specials.length && specials[0].k === "cd") seq.push(specials[0]);
+    if ((DEMO_CD || DEMO_ST) && specials.length && specials[0].k === "cd") seq.push(specials[0]);
     if (DEMO_WX) { var wxi = specials.filter(function (s) { return s.k === "wx"; }); if (wxi.length) seq.push(wxi[0]); }
     for (var i = 0; i < act.length; i++) {
       seq.push({ k: "img", dir: DIRS[kind].sign, f: act[i].file });
@@ -330,19 +314,25 @@
     } else if (item.k === "wx") {
       layer.innerHTML = weatherHTML() || "";
     } else if (item.k === "cd") {
-      var s = item.ev, sport = isSport(s);
+      /* Countdown card. state "upcoming" = segmented timer to item.at.
+         state "live" (event has started; grace = rest of the event day) = the
+         SHOWTIME / GAME TIME variant: same card, timer hidden, kicker swapped.
+         Copy states the scheduled start only — never "now playing" — because
+         the screen must not claim a status Armand hasn't set (rain calls etc.). */
+      var s = item.ev, sport = isSport(s), live = item.state === "live";
+      var kick = live ? (sport ? "GAME TIME ON THE BIG SCREEN" : "SHOWTIME ON THE BIG SCREEN") : "UP NEXT ON THE BIG SCREEN";
       layer.innerHTML =
-        '<div class="cdwrap">' +
+        '<div class="cdwrap' + (live ? " live" : "") + '">' +
           '<img class="cdbg" src="' + (item.art || "signs/main_signs/") + s.file + '" alt="">' +
           '<div class="cdol">' +
-            '<div class="cdk' + (sport ? " sport" : "") + '">UP NEXT ON THE BIG SCREEN</div>' +
+            '<div class="cdk' + (sport ? " sport" : "") + '">' + kick + '</div>' +
             '<div class="cdt">' + esc((s.title || "").toUpperCase()) + '</div>' +
-            '<div class="cdclock' + (sport ? " sport" : "") + '" data-target="' + esc(s.at) + '">' +
+            '<div class="cdclock' + (sport ? " sport" : "") + '" data-target="' + esc(item.at) + '">' +
               ["DAYS","HRS","MIN","SEC"].map(function (l) {
                 return '<div class="cdseg"><div class="cdnum" data-u="' + l + '">--</div><div class="cdlab">' + l + '</div></div>';
               }).join("") +
             '</div>' +
-            '<div class="cdwhen">' + esc(fmtWhen(s)) + '</div>' +
+            '<div class="cdwhen">' + esc(S.fmtWhen(item.at, now())) + '</div>' +
             '<img class="cdlogo" src="' + LOGO + '" alt="The Jade">' +
           '</div>' +
         '</div>';
@@ -352,7 +342,7 @@
   function tickTimers() {
     var els = document.querySelectorAll(".cdclock[data-target]");
     for (var i = 0; i < els.length; i++) {
-      var ms = new Date(els[i].getAttribute("data-target")) - new Date();
+      var ms = S.toInstant(els[i].getAttribute("data-target")) - S.nowMs();
       var segs = els[i].querySelectorAll(".cdnum");
       if (ms <= 0) { segs[0].textContent = "00"; segs[1].textContent = "00"; segs[2].textContent = "00"; segs[3].textContent = "00"; continue; }
       var t = Math.floor(ms / 1000);
@@ -365,14 +355,18 @@
   }
   setInterval(tickTimers, 500);
 
+  /* Corner chip = today's featured event (same answer as the countdown card):
+     the next start still ahead today, else the one that started most recently
+     (kept until overnight). Kicker reads TODAY before 5 PM, TONIGHT after. */
   function updateChips() {
     if (!(cfg.chip || {}).enabled) return;
-    var ev = eventToday(), night = inOvernight();
+    var t = now(), f = chipTarget(), night = inOvernight();
     panes.forEach(function (p) {
-      var showable = ev && !night && p.front && !p.front.querySelector(".cdwrap, .nightwrap");
+      var showable = f && !night && p.front && !p.front.querySelector(".cdwrap, .nightwrap");
       if (showable) {
         var vEl = p.chip.querySelector(".v");
-        var txt = fmtTime(new Date(ev.at)) + " · " + (ev.title || "").toUpperCase();
+        var txt = S.fmtTime(f.at) + " · " + (f.sign.title || "").toUpperCase();
+        p.chip.querySelector(".k").textContent = S.dayWord(f.at, t) || "TODAY";
         if (vEl.getAttribute("data-txt") !== txt) {
           vEl.setAttribute("data-txt", txt);
           vEl.innerHTML = "<span>" + esc(txt) + "</span>";
@@ -452,7 +446,7 @@
   function applyData(d) {
     if (d.config) { for (var k in d.config) cfg[k] = d.config[k]; }
     if (d.overnight_cards) cfg.overnight_cards = d.overnight_cards;
-    ["signs","general_mains","general_banners","overnight_mains","overnight_banners"].forEach(function (k) { data[k] = d[k] || []; });
+    ["signs","general_mains","general_banners"].forEach(function (k) { data[k] = d[k] || []; });
   }
   function load() {
     fetch("playlist.json?t=" + Date.now(), { cache: "no-store" })
@@ -462,8 +456,8 @@
   setInterval(load, (cfg.data_refresh_minutes || 5) * 60 * 1000);
   setInterval(function () { loadWeather(true); }, ((cfg.weather || {}).refresh_minutes || 20) * 60 * 1000);
   setInterval(function () {
-    var d = new Date();
-    if (d.getHours() === (cfg.nightly_reload_hour || 4) && d.getMinutes() === 0) location.reload(true);
+    var p = S.parts(new Date(S.nowMs()));              /* venue time, like everything else */
+    if (p.H === (cfg.nightly_reload_hour || 4) && p.M === 0) location.reload(true);
   }, 55 * 1000);
 
   fetch("playlist.json?t=" + Date.now(), { cache: "no-store" })

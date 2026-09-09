@@ -2,7 +2,8 @@
  * Jade Big Screen — automated overflow / render QA.
  *
  * Renders every live card state at exact pixel size and fails if ANY element
- * escapes its pane. Overflow on the 442x1080 sidebar is the single most common
+ * escapes its pane. (Scheduling semantics — what is featured when — are covered
+ * separately by qa_sched.js; run both before every push.) Overflow on the 442x1080 sidebar is the single most common
  * defect in this project (CLAUDE.md rule 16), so it gets checked by a machine,
  * not by eye.
  *
@@ -30,11 +31,15 @@ const CASES = [
   { name: 'main-countdown-movie',  page: 'main.html',   q: '?demo=countdown', w: 1920, h: 1080 },
   { name: 'main-countdown-sports', page: 'main.html',   q: '?demo=countdown', w: 1920, h: 1080, sports: true },
   { name: 'main-countdown-long',   page: 'main.html',   q: '?demo=countdown', w: 1920, h: 1080, longTitle: true },
+  { name: 'main-showtime-movie',   page: 'main.html',   q: '?demo=showtime',  w: 1920, h: 1080, live: true },
+  { name: 'main-showtime-sports',  page: 'main.html',   q: '?demo=showtime',  w: 1920, h: 1080, live: true, sports: true, longTitle: true },
   { name: 'main-weather',          page: 'main.html',   q: '?demo=weather',   w: 1920, h: 1080 },
   { name: 'main-overnight',        page: 'main.html',   q: '?demo=overnight', w: 1920, h: 1080, wait: 9000 },
   { name: 'side-countdown-movie',  page: 'banner.html', q: '?demo=countdown', w: 442,  h: 1080 },
   { name: 'side-countdown-sports', page: 'banner.html', q: '?demo=countdown', w: 442,  h: 1080, sports: true },
   { name: 'side-countdown-long',   page: 'banner.html', q: '?demo=countdown', w: 442,  h: 1080, longTitle: true },
+  { name: 'side-showtime-movie',   page: 'banner.html', q: '?demo=showtime',  w: 442,  h: 1080, live: true },
+  { name: 'side-showtime-sports',  page: 'banner.html', q: '?demo=showtime',  w: 442,  h: 1080, live: true, sports: true, longTitle: true },
   { name: 'side-weather',          page: 'banner.html', q: '?demo=weather',   w: 442,  h: 1080 },
   { name: 'side-overnight',        page: 'banner.html', q: '?demo=overnight', w: 442,  h: 1080, wait: 9000 },
   { name: 'screen-composite',      page: 'screen.html', q: '',                w: 1920, h: 1080, wait: 15000 }
@@ -86,16 +91,18 @@ function mockWeather() {
         if (String(u).indexOf('open-meteo') >= 0) return Promise.resolve({ json: () => Promise.resolve(mock) });
         if (String(u).indexOf('playlist.json') >= 0) {
           return of(u, o).then(r => r.json()).then(d => {
-            const today = new Date();
-            const iso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') +
-                        '-' + String(today.getDate()).padStart(2, '0');
+            /* Venue date (America/New_York) — the schedule runs on it, not the device clock. */
+            const iso = (window.JadeSched ? window.JadeSched.nowWall() : new Date().toISOString()).slice(0, 10);
             if (d.signs && d.signs.length) {
               const s = Object.assign({}, d.signs[0]);
+              delete s.airings; delete s.series; delete s.cadence;
               s.start = iso; s.end = iso;
-              s.at = iso + 'T23:59';
-              if (opt.sports) s.theme = LONG.theme;
+              /* upcoming -> 23:59 today (countdown); live -> 00:01 today (showtime state) */
+              s.at = iso + (opt.live ? 'T00:01' : 'T23:59');
+              if (opt.sports) { s.theme = LONG.theme; s.kind = 'sports'; }
               if (opt.longTitle) { s.title = LONG.title; s.theme = LONG.theme; }
-              d.signs = [s].concat(d.signs);
+              /* Only the QA sign, so the featured event is deterministic whatever day QA runs. */
+              d.signs = [s];
             }
             if (d.config && d.config.overnight) d.config.overnight.bounce_seconds = 2;
             return { json: () => Promise.resolve(d) };
@@ -103,7 +110,7 @@ function mockWeather() {
         }
         return of(u, o);
       };
-    }, mockWeather(), { sports: !!c.sports, longTitle: !!c.longTitle }, LONG);
+    }, mockWeather(), { sports: !!c.sports, longTitle: !!c.longTitle, live: !!c.live }, LONG);
 
     await page.goto(BASE + '/' + c.page + c.q, { waitUntil: 'networkidle0', timeout: 60000 });
     await new Promise(r => setTimeout(r, c.wait || 5000));
