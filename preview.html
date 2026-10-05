@@ -209,7 +209,10 @@
       '</div></div>';
   }
   function bannerCard(dir, f, side) {
-    return '<div class="sign' + (side ? ' side' : '') + '"><img class="art" loading="lazy" src="' + dir + esc(f) + '" alt=""></div>';
+    /* f is a filename, or {file,start,end} for a dated season sign (shown with its window). */
+    var g = typeof f === "string" ? { file: f } : (f || {});
+    var when = g.start ? '<div class="meta">' + esc(g.start) + ' \u2192 ' + esc(g.end || '') + '</div>' : '';
+    return '<div class="sign' + (side ? ' side' : '') + '"><img class="art" loading="lazy" src="' + dir + esc(g.file) + '" alt="">' + when + '</div>';
   }
 
   function renderTime() {

@@ -39,6 +39,7 @@ MAIN = os.path.join(HERE, "signs", "main_signs")
 def slug(t): return re.sub(r"[^a-z0-9]+", "_", t.lower()).strip("_")
 def to24(t12):
     m = re.match(r"\s*(\d+):(\d+)\s*(AM|PM)", t12, re.I)
+    if not m: return None   # "TBD" start time -> sign runs in rotation with no countdown
     h = int(m.group(1)); ap = m.group(3).upper()
     if ap == "PM" and h != 12: h += 12
     if ap == "AM" and h == 12: h = 0
@@ -64,7 +65,7 @@ ALIAS = {
 # stem -> (display title, theme, cadence label as printed on the art, series?)
 SHARED = {
     "college_gameday_at_jade": ("College Gameday @ Jade", "🏈 College Gameday @ Jade", "Saturdays · 12:00 PM", True),
-    "nfl_sundays_at_jade": ("NFL Sundays @ Jade", "🏈 NFL Sunday @ Jade", "Sundays · 1:00 PM · 4:05 PM · SNF 8:20 PM", True),
+    "nfl_sundays_at_jade": ("NFL Sundays @ Jade", "🏈 NFL Sunday @ Jade", "Sundays · 1:00 PM · 4:05 / 4:25 PM · SNF 8:20 PM", True),
     "thursday_monday_night_football_at_jade": ("Thursday & Monday Night Football @ Jade", "🏈 NFL Weekly", "Mondays & Thursdays · 8:15 PM", True),
     "nfl_preseason_at_jade": ("NFL Preseason @ Jade", "🏈 NFL Preseason", "Aug 14 & Aug 22", True),
     "florida_state_at_alabama_florida_at_auburn": ("Florida State at Alabama + Florida at Auburn", "🏈 College Gameday @ Jade", None, False),
@@ -80,22 +81,27 @@ signs, shared, skipped = [], OrderedDict(), []
 if os.path.exists(CSV):
     with open(CSV, encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
-            at = r["Date"] + "T" + to24(r["Start Time"])
+            t24 = to24(r["Start Time"])
+            at = (r["Date"] + "T" + t24) if t24 else None
             own = f"{ALIAS.get(r['Title'].strip(), slug(r['Title']))}_{r['Date']}.png"
+            if not at:   # TBD start time: never publish a sign without a time (qa_sched rule) — add it when the kickoff is set
+                skipped.append(f"{r['Date']} {r['Title']} (start time TBD — re-run when set)"); continue
             if os.path.exists(os.path.join(MAIN, own)):
                 if any(s["file"] == own for s in signs): continue
-                signs.append({"file": own, "title": r["Title"], "theme": r["Theme"],
-                              "kind": kind_of(r.get("Category"), r["Theme"]),
-                              "start": today, "end": r["Date"], "at": at})
+                sign = {"file": own, "title": r["Title"], "theme": r["Theme"],
+                        "kind": kind_of(r.get("Category"), r["Theme"]),
+                        "start": today, "end": r["Date"]}
+                sign["at"] = at
+                signs.append(sign)
                 continue
             stem = FOLD.get(r["Title"].strip()) or FOLD.get(r["Theme"].strip())
             if not stem:
                 skipped.append(f"{r['Date']} {r['Title']} (no PNG, no FOLD rule)"); continue
-            shared.setdefault(stem, []).append(at)
+            shared.setdefault((stem, at[:7]), []).append(at)   # one shared sign per stem per month (each month has its own art)
 else:
     print(f"WARNING: {CSV} not found — no event signs written", file=sys.stderr)
 
-for stem, ats in shared.items():
+for (stem, _month), ats in shared.items():
     ats = sorted(set(ats))
     fn = f"{stem}_{ats[0][:10]}.png"
     if not os.path.exists(os.path.join(MAIN, fn)):
@@ -111,8 +117,19 @@ signs.sort(key=lambda s: s["end"])
 signs = [s for s in signs if s["end"] >= s["start"]]
 
 def listdir(sub):
+    """Files in signs/<sub>/. A sign listed in signs/<sub>/_dates.json as
+    {"file.png": {"start": "YYYY-MM-DD", "end": "YYYY-MM-DD"}} is emitted as a dated
+    object and only shows between those dates (season signs like Spooktober)."""
     p = os.path.join(HERE, "signs", sub)
-    return sorted(os.listdir(p)) if os.path.isdir(p) else []
+    if not os.path.isdir(p): return []
+    dates = {}
+    dj = os.path.join(p, "_dates.json")
+    if os.path.exists(dj): dates = json.load(open(dj, encoding="utf-8"))
+    out = []
+    for f in sorted(os.listdir(p)):
+        if not f.lower().endswith(".png"): continue
+        out.append({"file": f, **dates[f]} if f in dates else f)
+    return out
 
 out = {
     "config": {

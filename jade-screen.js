@@ -74,6 +74,14 @@
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
     return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
   function now() { return S.nowWall(); }                     /* "YYYY-MM-DDTHH:MM" in ET */
+  /* General (evergreen) signs are plain filenames, or {file,start,end} for a dated
+     season sign (e.g. Spooktober, Oct 1-31). Dates are venue wall-clock YYYY-MM-DD. */
+  function generalFiles(list) {
+    var d = String(now()).slice(0, 10);
+    return (list || []).map(function (g) { return typeof g === "string" ? { file: g } : g; })
+      .filter(function (g) { return g && g.file && (!g.start || g.start <= d) && (!g.end || d <= g.end); })
+      .map(function (g) { return g.file; });
+  }
   function activeSigns() { return S.activeSigns(data.signs, now()); }
   function isSport(s) {
     if (s.kind) return s.kind === "sports";
@@ -240,9 +248,9 @@
     var f = countdownTarget();
     if (f) specials.push({ k: "cd", ev: f.sign, at: f.at, state: f.state, art: DIRS[kind].sign });
     if (kind === "main") {
-      (data.general_mains || []).forEach(function (f) { specials.push({ k: "img", dir: DIRS.main.general, f: f }); });
+      generalFiles(data.general_mains).forEach(function (f) { specials.push({ k: "img", dir: DIRS.main.general, f: f }); });
     } else {
-      (data.general_banners || []).forEach(function (f) { specials.push({ k: "img", dir: DIRS.side.general, f: f }); });
+      generalFiles(data.general_banners).forEach(function (f) { specials.push({ k: "img", dir: DIRS.side.general, f: f }); });
     }
     if ((cfg.weather || {}).enabled && wx) specials.push({ k: "wx", dwell: (cfg.weather.dwell_seconds || 14) });
     var n = (kind === "main" ? (cfg.countdown && cfg.countdown.every_n) : cfg.general_every_n) || 3;
