@@ -383,31 +383,22 @@
       "at": "2026-10-20T19:00"
     },
     {
-      "file": "wallace_gromit_the_curse_of_the_were_rabbit_2026-10-23.png",
-      "title": "Wallace & Gromit: The Curse of the Were-Rabbit",
+      "file": "ghostbusters_2026-10-23.png",
+      "title": "Ghostbusters",
       "theme": "🎃 Spooktober at The Jade",
       "kind": "movie",
       "start": "2026-08-04",
       "end": "2026-10-23",
-      "at": "2026-10-23T18:00"
+      "at": "2026-10-23T19:00"
     },
     {
-      "file": "monsters_inc_2026-10-23.png",
-      "title": "Monsters, Inc.",
+      "file": "ghostbusters_ii_2026-10-23.png",
+      "title": "Ghostbusters II",
       "theme": "🎃 Spooktober at The Jade",
       "kind": "movie",
       "start": "2026-08-04",
       "end": "2026-10-23",
-      "at": "2026-10-23T19:30"
-    },
-    {
-      "file": "practical_magic_2026-10-23.png",
-      "title": "Practical Magic",
-      "theme": "🎃 Spooktober at The Jade",
-      "kind": "movie",
-      "start": "2026-08-04",
-      "end": "2026-10-23",
-      "at": "2026-10-23T21:15"
+      "at": "2026-10-23T21:00"
     },
     {
       "file": "boo_a_madea_halloween_2026-10-24.png",
@@ -481,6 +472,42 @@
       "cadence": "Mondays & Thursdays · 8:15 PM"
     },
     {
+      "file": "pumpkin_decorating_day_2026-10-30.png",
+      "title": "Pumpkin Decorating Day",
+      "theme": "🎉 Community Event",
+      "kind": "sports",
+      "start": "2026-08-04",
+      "end": "2026-10-30",
+      "at": "2026-10-30T17:00"
+    },
+    {
+      "file": "wallace_gromit_the_curse_of_the_were_rabbit_2026-10-30.png",
+      "title": "Wallace & Gromit: The Curse of the Were-Rabbit",
+      "theme": "🎃 Spooktober at The Jade",
+      "kind": "movie",
+      "start": "2026-08-04",
+      "end": "2026-10-30",
+      "at": "2026-10-30T18:00"
+    },
+    {
+      "file": "monsters_inc_2026-10-30.png",
+      "title": "Monsters, Inc.",
+      "theme": "🎃 Spooktober at The Jade",
+      "kind": "movie",
+      "start": "2026-08-04",
+      "end": "2026-10-30",
+      "at": "2026-10-30T19:30"
+    },
+    {
+      "file": "practical_magic_2026-10-30.png",
+      "title": "Practical Magic",
+      "theme": "🎃 Spooktober at The Jade",
+      "kind": "movie",
+      "start": "2026-08-04",
+      "end": "2026-10-30",
+      "at": "2026-10-30T21:15"
+    },
+    {
       "file": "contest_winners_announced_2026-10-30.png",
       "title": "Contest Winners Announced",
       "theme": "🎉 Community Event",
@@ -488,24 +515,6 @@
       "start": "2026-08-04",
       "end": "2026-10-30",
       "at": "2026-10-30T18:00"
-    },
-    {
-      "file": "ghostbusters_2026-10-30.png",
-      "title": "Ghostbusters",
-      "theme": "🎃 Spooktober at The Jade",
-      "kind": "movie",
-      "start": "2026-08-04",
-      "end": "2026-10-30",
-      "at": "2026-10-30T19:00"
-    },
-    {
-      "file": "ghostbusters_ii_2026-10-30.png",
-      "title": "Ghostbusters II",
-      "theme": "🎃 Spooktober at The Jade",
-      "kind": "movie",
-      "start": "2026-08-04",
-      "end": "2026-10-30",
-      "at": "2026-10-30T21:00"
     },
     {
       "file": "florida_vs_georgia_2026-10-31.png",
