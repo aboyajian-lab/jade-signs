@@ -78,7 +78,16 @@
   .grid.small { grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); }
   .sign { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden;
           display:block; color:inherit; text-decoration:none; }
-  .sign img.art { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#000; }
+  .sign img.art { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#000; cursor:zoom-in; }
+  /* lightbox: click any sign image to see it full size */
+  #lb { position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; z-index:50; cursor:zoom-out; }
+  #lb.open { display:flex; align-items:center; justify-content:center; gap:16px; padding:24px; }
+  #lb { --sw: min(30vw, calc((100vh - 48px) * 0.4093)); }
+  #lb img { max-height:calc(100vh - 48px); max-width:calc(100vw - 48px); object-fit:contain; box-shadow:0 0 0 1px #222, 0 20px 60px #000; }
+  #lb.has-side img.lb-main { max-width:calc(100vw - 64px - var(--sw)); }
+  #lb img.lb-side { max-width:var(--sw); }
+  #lb img.lb-side[hidden] { display:none; }
+  #lb .lb-x { position:fixed; top:14px; right:18px; color:var(--muted); font:600 13px/1 var(--ui); letter-spacing:.14em; }
   .sign.side img.art { aspect-ratio:442/1080; }
   .sign .meta { padding:9px 10px 11px; }
   .sign .ti { font-size:13.5px; font-weight:700; line-height:1.25; }
@@ -339,6 +348,29 @@
     .catch(function () { out.innerHTML = '<div class="empty">Could not load playlist.json.</div>'; });
 
   render();
+
+  /* lightbox */
+  var lb = document.createElement('div'); lb.id = 'lb';
+  lb.innerHTML = '<img class="lb-main" alt=""><img class="lb-side" alt="" hidden><div class="lb-x">CLICK OR ESC TO CLOSE</div>';
+  document.body.appendChild(lb);
+  var lbMain = lb.querySelector('.lb-main'), lbSide = lb.querySelector('.lb-side');
+  function closeLb() { lb.classList.remove('open'); lb.classList.remove('has-side'); lbMain.removeAttribute('src'); lbSide.removeAttribute('src'); lbSide.hidden = true; }
+  lbSide.onerror = function () { lbSide.hidden = true; lb.classList.remove('has-side'); };
+  lbSide.onload = function () { lbSide.hidden = false; lb.classList.add('has-side'); };
+  document.addEventListener('click', function (e) {
+    var img = e.target.closest && e.target.closest('img.art');
+    if (!img) return;
+    if (e.target.closest('a')) return;
+    e.preventDefault();
+    var src = img.getAttribute('src');
+    lbMain.src = src;
+    lbSide.hidden = true; lb.classList.remove('has-side');
+    if (src.indexOf('signs/main_signs/') === 0) lbSide.src = src.replace('signs/main_signs/', 'signs/side_banners/');
+    else if (src.indexOf('signs/general_mains/') === 0) lbSide.src = src.replace('signs/general_mains/', 'signs/general_banners/');
+    lb.classList.add('open');
+  });
+  lb.addEventListener('click', closeLb);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLb(); });
 })();
 </script>
 </body>
