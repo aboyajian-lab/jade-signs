@@ -559,6 +559,290 @@
       ],
       "series": true,
       "cadence": "Saturdays · 12:00 PM"
+    },
+    {
+      "file": "jaguars_at_ravens_2026-11-05.png",
+      "title": "Jaguars at Ravens",
+      "theme": "🏈 NFL Thursday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-05",
+      "at": "2026-11-05T20:15"
+    },
+    {
+      "file": "atlantis_the_lost_empire_2026-11-06.png",
+      "title": "Atlantis: The Lost Empire",
+      "theme": "👨‍👩‍👧 Family Night",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-06",
+      "at": "2026-11-06T19:00"
+    },
+    {
+      "file": "miami_at_notre_dame_2026-11-07.png",
+      "title": "Miami at Notre Dame",
+      "theme": "🏈 College Gameday @ Jade",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-07",
+      "at": "2026-11-07T19:30"
+    },
+    {
+      "file": "buccaneers_at_bears_2026-11-08.png",
+      "title": "Buccaneers at Bears",
+      "theme": "🏈 NFL Sunday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-08",
+      "at": "2026-11-08T20:20"
+    },
+    {
+      "file": "bills_at_vikings_2026-11-09.png",
+      "title": "Bills at Vikings",
+      "theme": "🏈 NFL Monday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-09",
+      "at": "2026-11-09T20:15"
+    },
+    {
+      "file": "devotion_2026-11-11.png",
+      "title": "Devotion",
+      "theme": "🇺🇸 Veterans Day Salute",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-11",
+      "at": "2026-11-11T19:00"
+    },
+    {
+      "file": "commanders_at_giants_2026-11-12.png",
+      "title": "Commanders at Giants",
+      "theme": "🏈 NFL Thursday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-12",
+      "at": "2026-11-12T20:15"
+    },
+    {
+      "file": "knives_out_2026-11-13.png",
+      "title": "Knives Out",
+      "theme": "🔪 Thrill & Chill Night",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-13",
+      "at": "2026-11-13T19:00"
+    },
+    {
+      "file": "harry_potter_and_the_chamber_of_secrets_2026-11-14.png",
+      "title": "Harry Potter and the Chamber of Secrets",
+      "theme": "🎶 Magic & Melody",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-14",
+      "at": "2026-11-14T19:00"
+    },
+    {
+      "file": "steelers_at_bengals_2026-11-15.png",
+      "title": "Steelers at Bengals",
+      "theme": "🏈 NFL Sunday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-15",
+      "at": "2026-11-15T20:20"
+    },
+    {
+      "file": "chargers_at_ravens_2026-11-16.png",
+      "title": "Chargers at Ravens",
+      "theme": "🏈 NFL Monday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-16",
+      "at": "2026-11-16T20:15"
+    },
+    {
+      "file": "bucks_at_heat_2026-11-18.png",
+      "title": "Bucks at Heat",
+      "theme": "🏀 NBA on ESPN",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-18",
+      "at": "2026-11-18T19:00"
+    },
+    {
+      "file": "colts_at_texans_2026-11-19.png",
+      "title": "Colts at Texans",
+      "theme": "🏈 NFL Thursday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-19",
+      "at": "2026-11-19T20:15"
+    },
+    {
+      "file": "while_you_were_sleeping_2026-11-20.png",
+      "title": "While You Were Sleeping",
+      "theme": "💞 Romance Night",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-20",
+      "at": "2026-11-20T19:00"
+    },
+    {
+      "file": "spider_man_into_the_spider_verse_2026-11-21.png",
+      "title": "Spider-Man: Into the Spider-Verse",
+      "theme": "🚀 Sci-Fi Odyssey",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-21",
+      "at": "2026-11-21T19:00"
+    },
+    {
+      "file": "vikings_at_49ers_2026-11-22.png",
+      "title": "Vikings at 49ers",
+      "theme": "🏈 NFL Sunday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-22",
+      "at": "2026-11-22T20:20"
+    },
+    {
+      "file": "bengals_at_commanders_2026-11-23.png",
+      "title": "Bengals at Commanders",
+      "theme": "🏈 NFL Monday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-23",
+      "at": "2026-11-23T20:15"
+    },
+    {
+      "file": "packers_at_rams_2026-11-25.png",
+      "title": "Packers at Rams",
+      "theme": "🏈 Thanksgiving Eve Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-25",
+      "at": "2026-11-25T20:00"
+    },
+    {
+      "file": "heat_at_76ers_2026-11-25.png",
+      "title": "Heat at 76ers",
+      "theme": "🏀 NBA on ESPN",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-25",
+      "at": "2026-11-25T17:00"
+    },
+    {
+      "file": "thanksgiving_day_football_2026-11-26.png",
+      "title": "Thanksgiving Day Football",
+      "theme": "🦃 Thanksgiving Day Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-26",
+      "airings": [
+        "2026-11-26T13:00",
+        "2026-11-26T16:30",
+        "2026-11-26T20:20"
+      ]
+    },
+    {
+      "file": "uncle_buck_2026-11-27.png",
+      "title": "Uncle Buck",
+      "theme": "😂 Comedy Night",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-27",
+      "at": "2026-11-27T19:30"
+    },
+    {
+      "file": "florida_at_florida_state_2026-11-27.png",
+      "title": "Florida at Florida State",
+      "theme": "🏈 Sunshine Showdown",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-27",
+      "at": "2026-11-27T15:30"
+    },
+    {
+      "file": "mamma_mia_2026-11-28.png",
+      "title": "Mamma Mia!",
+      "theme": "🎶 Magic & Melody",
+      "kind": "movie",
+      "start": "2026-11-04",
+      "end": "2026-11-28",
+      "at": "2026-11-28T19:00"
+    },
+    {
+      "file": "college_gameday_at_jade_2026-11-07.png",
+      "title": "College Gameday @ Jade",
+      "theme": "🏈 College Gameday @ Jade",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-28",
+      "airings": [
+        "2026-11-07T12:00",
+        "2026-11-14T12:00",
+        "2026-11-21T12:00",
+        "2026-11-28T12:00"
+      ],
+      "series": true,
+      "cadence": "Saturdays · 12:00 PM"
+    },
+    {
+      "file": "patriots_at_chargers_2026-11-29.png",
+      "title": "Patriots at Chargers",
+      "theme": "🏈 NFL Sunday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-29",
+      "at": "2026-11-29T20:20"
+    },
+    {
+      "file": "nfl_sundays_at_jade_2026-11-01.png",
+      "title": "NFL Sundays @ Jade",
+      "theme": "🏈 NFL Sunday @ Jade",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-29",
+      "airings": [
+        "2026-11-08T13:00",
+        "2026-11-08T16:25",
+        "2026-11-15T13:00",
+        "2026-11-15T16:25",
+        "2026-11-22T13:00",
+        "2026-11-22T16:25",
+        "2026-11-29T13:00",
+        "2026-11-29T16:25"
+      ],
+      "series": true,
+      "cadence": "Sundays · 1:00 PM · 4:25 PM · SNF 8:20 PM"
+    },
+    {
+      "file": "panthers_at_buccaneers_2026-11-30.png",
+      "title": "Panthers at Buccaneers",
+      "theme": "🏈 NFL Monday Night Football",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-30",
+      "at": "2026-11-30T20:15"
+    },
+    {
+      "file": "thursday_monday_night_football_at_jade_2026-11-01.png",
+      "title": "Thursday & Monday Night Football @ Jade",
+      "theme": "🏈 NFL Weekly",
+      "kind": "sports",
+      "start": "2026-11-04",
+      "end": "2026-11-30",
+      "airings": [
+        "2026-11-05T20:15",
+        "2026-11-09T20:15",
+        "2026-11-12T20:15",
+        "2026-11-16T20:15",
+        "2026-11-19T20:15",
+        "2026-11-23T20:15",
+        "2026-11-30T20:15"
+      ],
+      "series": true,
+      "cadence": "Mondays & Thursdays · 8:15 PM"
     }
   ],
   "general_mains": [
@@ -567,7 +851,8 @@
       "file": "spooktober_at_the_jade_2026-10-01.png",
       "start": "2026-10-01",
       "end": "2026-10-31"
-    }
+    },
+    "vote_next_month.png"
   ],
   "general_banners": [
     "12.png",
@@ -582,6 +867,7 @@
       "file": "spooktober_at_the_jade_2026-10-01.png",
       "start": "2026-10-01",
       "end": "2026-10-31"
-    }
+    },
+    "vote_next_month.png"
   ]
 }
