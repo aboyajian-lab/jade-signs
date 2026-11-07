@@ -16,6 +16,19 @@
 @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 700; font-display: block; src: url(street/fonts/poppins-latin-700-normal.woff2) format('woff2'); }
 html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; cursor: none; }
 #stage { position: absolute; left: 0; top: 0; width: 1152px; height: 768px; transform-origin: 0 0; overflow: hidden; background: #002c3f; }
+/* ---- Logo ---- */
+.gf{transform-box:fill-box;transform-origin:50% 50%}
+.gem-flash{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.98),rgba(188,211,226,.72) 55%,rgba(188,211,226,0) 100%);-webkit-mask:url(street/gem-cream.png) center/contain no-repeat;mask:url(street/gem-cream.png) center/contain no-repeat}
+.gem-gleam{position:absolute;inset:0;overflow:hidden;-webkit-mask:url(street/gem-cream.png) center/contain no-repeat;mask:url(street/gem-cream.png) center/contain no-repeat}
+.gem-gleam::before{content:"";position:absolute;top:0;bottom:0;left:0;width:220%;transform:translateX(-90%);background:linear-gradient(110deg,rgba(0,0,0,0) 28%,rgba(255,255,255,.98) 47%,rgba(255,255,255,.98) 53%,rgba(0,0,0,0) 72%);animation: slogo-glint 8s ease-in-out infinite}
+.still .gem-gleam::before{animation:none}
+@keyframes slogo-gfacet{0%{transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(.12);opacity:0}14%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1}93%{opacity:1}100%{opacity:0}}
+@keyframes slogo-gemmove{0%,27%{transform:translate(-466px,118px) scale(2.9)}39%{transform:translate(0,0) scale(1)}93%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(0,0) scale(1);opacity:0}}
+@keyframes slogo-flash{0%,38%{opacity:0}42%{opacity:.95}52%,100%{opacity:0}}
+@keyframes slogo-glint{0%,56%{transform:translateX(-90%)}74%,100%{transform:translateX(35.45%)}}
+@keyframes slogo-wipe{0%,30%{clip-path:inset(0 100% 0 0)}41%{clip-path:inset(0 0 0 0)}93%{clip-path:inset(0 0 0 0);opacity:1}100%{opacity:0}}
+@keyframes slogo-rise{0%,41%{transform:translateY(40px);opacity:0}49%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
+@keyframes slogo-rise2{0%,47%{transform:translateY(40px);opacity:0}55%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
 /* ---- Main ---- */
 .bg-pool{background:url(street/pool.jpg) center/cover no-repeat}
 @keyframes smain-kb{0%{transform:scale(1.14)}100%{transform:scale(1)}}
@@ -63,6 +76,19 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 @keyframes sprice2-rise{0%{transform:translateY(40px);opacity:0}8%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
 @keyframes sprice2-rise3{0%,24%{transform:translateY(40px);opacity:0}32%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
 @keyframes sprice2-sweep{0%,22%{transform:scaleX(0)}32%{transform:scaleX(1)}93%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+/* ---- Logo2 ---- */
+.bg-aerial{background:url(street/aerial.jpg) center/cover no-repeat}
+.gf{transform-box:fill-box;transform-origin:50% 50%}
+.gem-flash{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.98),rgba(188,211,226,.72) 55%,rgba(188,211,226,0) 100%);-webkit-mask:url(street/gem-cream.png) center/contain no-repeat;mask:url(street/gem-cream.png) center/contain no-repeat}
+.gem-gleam{position:absolute;inset:0;overflow:hidden;-webkit-mask:url(street/gem-cream.png) center/contain no-repeat;mask:url(street/gem-cream.png) center/contain no-repeat}
+.gem-gleam::before{content:"";position:absolute;top:0;bottom:0;left:0;width:220%;transform:translateX(-90%);background:linear-gradient(110deg,rgba(0,0,0,0) 28%,rgba(255,255,255,.98) 47%,rgba(255,255,255,.98) 53%,rgba(0,0,0,0) 72%);animation: slogo2-glint 8s ease-in-out infinite}
+.still .gem-gleam::before{animation:none}
+@keyframes slogo2-kb{0%{transform:scale(1.14)}100%{transform:scale(1)}}
+@keyframes slogo2-gfacet{0%{transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(.12);opacity:0}14%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1}93%{opacity:1}100%{opacity:0}}
+@keyframes slogo2-flash{0%,19%{opacity:0}24%{opacity:.95}34%,100%{opacity:0}}
+@keyframes slogo2-glint{0%,38%{transform:translateX(-90%)}56%,100%{transform:translateX(35.45%)}}
+@keyframes slogo2-rise{0%,22%{transform:translateY(50px);opacity:0}30%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
+@keyframes slogo2-rise2{0%,28%{transform:translateY(40px);opacity:0}36%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
 /* ---- Ticker ---- */
 @keyframes sticker-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes sticker-rise{0%{transform:translateY(40px);opacity:0}8%{transform:translateY(0);opacity:1}93%{opacity:1}100%{opacity:0}}
@@ -104,14 +130,50 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 </head>
 <body>
 <div id="stage"></div>
+<template id="t-Logo"><div class="" style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
+  <img src="street/jade-wordmark-nogem.png" alt="The Jade" style="position: absolute; left: 57px; top: 187px; width: 889px; height: 160px; animation: slogo-wipe 8s cubic-bezier(.16,1,.3,1) infinite">
+  <div style="position: absolute; left: 991px; top: 188px; width: 103px; height: 157px; transform-origin: 50% 50%; animation: slogo-gemmove 8s cubic-bezier(.16,1,.3,1) infinite">
+    <svg viewBox="102.8 22.0 306.3 468.1" width="103" height="157" aria-hidden="true" style="position: absolute; inset: 0; overflow: visible">
+      <path class="gf" fill="#eeebe9" style="--dx: 940px; --dy: 860px; --r: 135deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.12s" d="M374.31,359.55l-64.46-66.14c-.71-.73-1.9-.61-2.46.24l-58.82,90.03c-.15.23-.24.49-.25.76l-6.42,98.79c-.07,1.02.83,1.830,1.84,1.66l59.2-9.88c.45-.07.84-.34,1.08-.72l70.5-112.8c.39-.62.3-1.42-.21-1.94ZM261.34,463.44c-.07,1.16-1.03,2.05-2.18,2.05-.04,0-.09,0-.13,0-1.2-.07-2.12-1.1-2.05-2.31l3.920-66.62c.07-1.2.96-2.22,2.31-2.05,1.2.07,2.12,1.1,2.05,2.31l-3.92,66.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -60px; --dy: 1120px; --r: -100deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.22s" d="M299.84,202.57l-46.89-25.73c-.58-.32-1.3-.29-1.85.09l-36.74,24.98c-.37.25-.63.63-.73,1.06l-23.65,100.81c-.12.53,0,1.08.34,1.51l49.11,61.58c.75.94,2.19.88,2.85-.12l58.17-86.87c.2-.29.3-.63.3-.98v-74.76c0-.65-.35-1.24-.92-1.55ZM240.24,348.8c-.4.31-.88.47-1.35.47-.65,0-1.29-.28-1.72-.84l-27.81-35.43c-.75-.95-.58-2.32.37-3.07.94-.75,2.32-.59,3.07.37l27.81,35.43c.75.95.58,2.32-.37,3.07ZM250.97,193.72l-18.2,12.83c-.38.27-.82.4-1.26.4-.68,0-1.36-.32-1.79-.93-.69-.98-.46-2.35.53-3.04l18.2-12.83c.97-.68,2.34-.46,3.04.53.69.98.46,2.35-.53,3.04Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 1360px; --dy: -60px; --r: 190deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.32s" d="M403.79,216.03l-35.41-74.17c-.66-1.39-2.55-1.64-3.54-.46l-50.9,60.19c-.32.38-.5.87-.5,1.37v72.58c0,.56.22,1.1.62,1.5l64.85,65.23c1.22,1.22,3.31.56,3.6-1.14l21.45-123.82c.08-.43.01-.88-.18-1.28ZM365.63,163.29l-21.98,25.14c-.43.49-1.04.75-1.64.75-.51,0-1.02-.18-1.44-.54-.9-.79-1-2.17-.2-3.08l21.98-25.14c.8-.91,2.18-1,3.08-.2.9.79,1,2.170.2,3.08Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 860px; --dy: -960px; --r: 150deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.42s" d="M358.11,122.89l-95.03-92.87c-1.28-1.25-3.43-.32-3.4,1.46l2.17,127.32c.01.72.41,1.38,1.04,1.72l42.4,23.08c.82.45,1.84.27,2.46-.44l50.47-57.52c.7-.8.65-2.01-.11-2.75ZM274.77,149.44c0,1.21-.98,2.18-2.18,2.18s-2.18-.98-2.18-2.18v-33.39c0-1.21.98-2.18,2.18-2.18s2.18.98,2.18,2.18v33.39Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -940px; --dy: 860px; --r: -135deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.52s" d="M232.1,384l-52.02-66.88c-.58-.75-1.61-.97-2.45-.53l-65.11,33.95c-1.12.58-1.4,2.06-.58,3.01l111.58,129.61c1.15,1.33,3.34.59,3.44-1.16l5.56-96.68c.03-.47-.12-.94-.41-1.31ZM155.98,387.02c-.41.35-.92.52-1.42.52-.61,0-1.23-.26-1.66-.77l-15.87-18.59c-.79-.92-.68-2.29.24-3.08.92-.79,2.29-.68,3.08.24l15.87,18.59c.79.92.68,2.29-.24,3.08ZM165.55,337.46l-34.38,17.89c-.32.16-.67.24-1.01.24-.79,0-1.55-.43-1.94-1.18-.56-1.07-.14-2.39.93-2.95l34.38-17.89c1.05-.55,2.38-.15,2.95.93.56,1.07.14,2.39-.93,2.950Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -1360px; --dy: -80px; --r: -190deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.62s" d="M197.7,204.46l-78.89-51.31c-1.02-.67-2.38.03-2.44,1.25l-8.36,177.73c-.06,1.21,1.21,2.03,2.3,1.48l66.97-34.03c.42-.21.73-.61.83-1.07l20.28-92.38c.14-.64-.13-1.310-.68-1.66ZM122.81,313.27c-.07,1.16-1.04,2.05-2.18,2.05-.05,0-.09,0-.14,0-1.21-.07-2.12-1.12-2.04-2.32l4.1-64.62c.07-1.21,1.08-2.25,2.32-2.04,1.21.07,2.12,1.12,2.04,2.32l-4.1,64.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -860px; --dy: -960px; --r: -150deg; animation: slogo-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.72s" d="M241.98,28.47c-.03-1.23-1.5-1.84-2.4-1.01l-114.69,106.86c-.67.63-.58,1.72.18,2.23l77.94,52.15c.48.32,1.1.32,1.58,0l40.11-26.74c.41-.27.65-.73.63-1.22l-3.36-132.27ZM205.75,176.76c-.43.59-1.1.91-1.78.91-.44,0-.89-.13-1.270-.41l-54.25-38.87c-.98-.7-1.21-2.07-.5-3.05.71-.97,2.08-1.21,3.05-.5l54.25,38.87c.98.7,1.21,2.07.5,3.05Z"></path>
+    </svg>
+    <span class="gem-flash" style="animation: slogo-flash 8s ease-out infinite"></span>
+    <span class="gem-gleam"></span>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; top: 386px; text-align: center; font-size: 80px; line-height: 1; font-weight: 600; letter-spacing: 0.32em; padding-left: 0.32em; animation: slogo-rise 8s cubic-bezier(.16,1,.3,1) infinite">APARTMENTS</div>
+  <div style="position: absolute; left: 0; right: 0; top: 506px; text-align: center; font-size: 96px; line-height: 1; font-weight: 700; color: #f4b97d; animation: slogo-rise2 8s cubic-bezier(.16,1,.3,1) infinite">NOW LEASING</div>
+</div></template>
+<template id="t-Logo-still"><div class="still" style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
+  <img src="street/jade-wordmark-nogem.png" alt="The Jade" style="position: absolute; left: 57px; top: 187px; width: 889px; height: 160px; animation: none">
+  <div style="position: absolute; left: 991px; top: 188px; width: 103px; height: 157px; transform-origin: 50% 50%; animation: none">
+    <svg viewBox="102.8 22.0 306.3 468.1" width="103" height="157" aria-hidden="true" style="position: absolute; inset: 0; overflow: visible">
+      <path class="gf" fill="#eeebe9" style="--dx: 940px; --dy: 860px; --r: 135deg; animation: none; animation-delay: 0.12s" d="M374.31,359.55l-64.46-66.14c-.71-.73-1.9-.61-2.46.24l-58.82,90.03c-.15.23-.24.49-.25.76l-6.42,98.79c-.07,1.02.83,1.830,1.84,1.66l59.2-9.88c.45-.07.84-.34,1.08-.72l70.5-112.8c.39-.62.3-1.42-.21-1.94ZM261.34,463.44c-.07,1.16-1.03,2.05-2.18,2.05-.04,0-.09,0-.13,0-1.2-.07-2.12-1.1-2.05-2.31l3.920-66.62c.07-1.2.96-2.22,2.31-2.05,1.2.07,2.12,1.1,2.05,2.31l-3.92,66.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -60px; --dy: 1120px; --r: -100deg; animation: none; animation-delay: 0.22s" d="M299.84,202.57l-46.89-25.73c-.58-.32-1.3-.29-1.85.09l-36.74,24.98c-.37.25-.63.63-.73,1.06l-23.65,100.81c-.12.53,0,1.08.34,1.51l49.11,61.58c.75.94,2.19.88,2.85-.12l58.17-86.87c.2-.29.3-.63.3-.98v-74.76c0-.65-.35-1.24-.92-1.55ZM240.24,348.8c-.4.31-.88.47-1.35.47-.65,0-1.29-.28-1.72-.84l-27.81-35.43c-.75-.95-.58-2.32.37-3.07.94-.75,2.32-.59,3.07.37l27.81,35.43c.75.95.58,2.32-.37,3.07ZM250.97,193.72l-18.2,12.83c-.38.27-.82.4-1.26.4-.68,0-1.36-.32-1.79-.93-.69-.98-.46-2.35.53-3.04l18.2-12.83c.97-.68,2.34-.46,3.04.53.69.98.46,2.35-.53,3.04Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 1360px; --dy: -60px; --r: 190deg; animation: none; animation-delay: 0.32s" d="M403.79,216.03l-35.41-74.17c-.66-1.39-2.55-1.64-3.54-.46l-50.9,60.19c-.32.38-.5.87-.5,1.37v72.58c0,.56.22,1.1.62,1.5l64.85,65.23c1.22,1.22,3.31.56,3.6-1.14l21.45-123.82c.08-.43.01-.88-.18-1.28ZM365.63,163.29l-21.98,25.14c-.43.49-1.04.75-1.64.75-.51,0-1.02-.18-1.44-.54-.9-.79-1-2.17-.2-3.08l21.98-25.14c.8-.91,2.18-1,3.08-.2.9.79,1,2.170.2,3.08Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 860px; --dy: -960px; --r: 150deg; animation: none; animation-delay: 0.42s" d="M358.11,122.89l-95.03-92.87c-1.28-1.25-3.43-.32-3.4,1.46l2.17,127.32c.01.72.41,1.38,1.04,1.72l42.4,23.08c.82.45,1.84.27,2.46-.44l50.47-57.52c.7-.8.65-2.01-.11-2.75ZM274.77,149.44c0,1.21-.98,2.18-2.18,2.18s-2.18-.98-2.18-2.18v-33.39c0-1.21.98-2.18,2.18-2.18s2.18.98,2.18,2.18v33.39Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -940px; --dy: 860px; --r: -135deg; animation: none; animation-delay: 0.52s" d="M232.1,384l-52.02-66.88c-.58-.75-1.61-.97-2.45-.53l-65.11,33.95c-1.12.58-1.4,2.06-.58,3.01l111.58,129.61c1.15,1.33,3.34.59,3.44-1.16l5.56-96.68c.03-.47-.12-.94-.41-1.31ZM155.98,387.02c-.41.35-.92.52-1.42.52-.61,0-1.23-.26-1.66-.77l-15.87-18.59c-.79-.92-.68-2.29.24-3.08.92-.79,2.29-.68,3.08.24l15.87,18.59c.79.92.68,2.29-.24,3.08ZM165.55,337.46l-34.38,17.89c-.32.16-.67.24-1.01.24-.79,0-1.55-.43-1.94-1.18-.56-1.07-.14-2.39.93-2.95l34.38-17.89c1.05-.55,2.38-.15,2.95.93.56,1.07.14,2.39-.93,2.950Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -1360px; --dy: -80px; --r: -190deg; animation: none; animation-delay: 0.62s" d="M197.7,204.46l-78.89-51.31c-1.02-.67-2.38.03-2.44,1.25l-8.36,177.73c-.06,1.21,1.21,2.03,2.3,1.48l66.97-34.03c.42-.21.73-.61.83-1.07l20.28-92.38c.14-.64-.13-1.310-.68-1.66ZM122.81,313.27c-.07,1.16-1.04,2.05-2.18,2.05-.05,0-.09,0-.14,0-1.21-.07-2.12-1.12-2.04-2.32l4.1-64.62c.07-1.21,1.08-2.25,2.32-2.04,1.21.07,2.12,1.12,2.04,2.32l-4.1,64.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -860px; --dy: -960px; --r: -150deg; animation: none; animation-delay: 0.72s" d="M241.98,28.47c-.03-1.23-1.5-1.84-2.4-1.01l-114.69,106.86c-.67.63-.58,1.72.18,2.23l77.94,52.15c.48.32,1.1.32,1.58,0l40.11-26.74c.41-.27.65-.73.63-1.22l-3.36-132.27ZM205.75,176.76c-.43.59-1.1.91-1.78.91-.44,0-.89-.13-1.270-.41l-54.25-38.87c-.98-.7-1.21-2.07-.5-3.05.71-.97,2.08-1.21,3.05-.5l54.25,38.87c.98.7,1.21,2.07.5,3.05Z"></path>
+    </svg>
+    <span class="gem-flash" style="animation: none"></span>
+    <span class="gem-gleam"></span>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; top: 386px; text-align: center; font-size: 80px; line-height: 1; font-weight: 600; letter-spacing: 0.32em; padding-left: 0.32em; animation: none">APARTMENTS</div>
+  <div style="position: absolute; left: 0; right: 0; top: 506px; text-align: center; font-size: 96px; line-height: 1; font-weight: 700; color: #f4b97d; animation: none">NOW LEASING</div>
+</div></template>
 <template id="t-Main"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div class="bg-pool" style="position: absolute; inset: 0; animation: smain-kb 8s ease-out infinite"></div>
   <div style="position: absolute; inset: 0; background: rgba(0, 44, 63, 0.68)"></div>
   <div style="position: absolute; left: 40px; right: 40px; top: 0; height: 768px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
     <img src="street/jade-wordmark-cream.png" alt="The Jade" style="height: 172px; width: auto; animation: smain-grow 8s cubic-bezier(.16,1,.3,1) infinite">
-    <div style="margin-top: 30px; font-family: 'Cormorant', Georgia, serif; font-size: 140px; line-height: 1; font-weight: 700; white-space: nowrap; animation: smain-rise2 8s cubic-bezier(.16,1,.3,1) infinite">Your <em style="font-style: italic; font-weight: 600">resort life</em></div>
+    <div style="margin-top: 30px; font-family: 'Cormorant', Georgia, serif; font-size: 140px; line-height: 1; font-weight: 700; white-space: nowrap; animation: smain-rise2 8s cubic-bezier(.16,1,.3,1) infinite">Your new <em style="font-style: italic; font-weight: 600">home</em></div>
     <div style="font-family: 'Cormorant', Georgia, serif; font-size: 140px; line-height: 1.02; font-weight: 700; white-space: nowrap; animation: smain-rise2 8s cubic-bezier(.16,1,.3,1) infinite">starts here.</div>
-    <div style="margin-top: 24px; font-size: 74px; line-height: 1; font-weight: 600; white-space: nowrap; animation: smain-rise3 8s cubic-bezier(.16,1,.3,1) infinite">1 &amp; 2 beds from <span style="color: #f4b97d; font-weight: 700">$1,295</span></div>
+    <div style="margin-top: 24px; font-size: 74px; line-height: 1; font-weight: 600; white-space: nowrap; animation: smain-rise3 8s cubic-bezier(.16,1,.3,1) infinite">Apartments from <span style="color: #f4b97d; font-weight: 700">$1,295</span></div>
   </div>
 </div></template>
 <template id="t-Main-still"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
@@ -119,15 +181,15 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   <div style="position: absolute; inset: 0; background: rgba(0, 44, 63, 0.68)"></div>
   <div style="position: absolute; left: 40px; right: 40px; top: 0; height: 768px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
     <img src="street/jade-wordmark-cream.png" alt="The Jade" style="height: 172px; width: auto; animation: none">
-    <div style="margin-top: 30px; font-family: 'Cormorant', Georgia, serif; font-size: 140px; line-height: 1; font-weight: 700; white-space: nowrap; animation: none">Your <em style="font-style: italic; font-weight: 600">resort life</em></div>
+    <div style="margin-top: 30px; font-family: 'Cormorant', Georgia, serif; font-size: 140px; line-height: 1; font-weight: 700; white-space: nowrap; animation: none">Your new <em style="font-style: italic; font-weight: 600">home</em></div>
     <div style="font-family: 'Cormorant', Georgia, serif; font-size: 140px; line-height: 1.02; font-weight: 700; white-space: nowrap; animation: none">starts here.</div>
-    <div style="margin-top: 24px; font-size: 74px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">1 &amp; 2 beds from <span style="color: #f4b97d; font-weight: 700">$1,295</span></div>
+    <div style="margin-top: 24px; font-size: 74px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">Apartments from <span style="color: #f4b97d; font-weight: 700">$1,295</span></div>
   </div>
 </div></template>
 <template id="t-Price1"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div style="position: absolute; left: 40px; top: 30px; display: flex; align-items: center; gap: 22px; font-size: 76px; line-height: 1; font-weight: 700; letter-spacing: 0.04em; animation: sprice1-rise 8s cubic-bezier(.16,1,.3,1) infinite">
     <div style="width: 24px; height: 24px; border-radius: 50%; background: #f4b97d"></div>
-    <span>ONE-BEDROOMS</span>
+    <span>1-BED APARTMENTS</span>
   </div>
   <div style="position: absolute; left: 40px; top: 104px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 100px; line-height: 1; font-weight: 600; color: #bcd3e2; animation: sprice1-rise 8s cubic-bezier(.16,1,.3,1) infinite">from</div>
   <div style="position: absolute; left: 32px; top: 206px; display: flex; align-items: flex-start; font-size: 272px; line-height: 1; font-weight: 700; color: #f4b97d; font-variant-numeric: tabular-nums">
@@ -157,7 +219,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 <template id="t-Price1-still"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div style="position: absolute; left: 40px; top: 30px; display: flex; align-items: center; gap: 22px; font-size: 76px; line-height: 1; font-weight: 700; letter-spacing: 0.04em; animation: none">
     <div style="width: 24px; height: 24px; border-radius: 50%; background: #f4b97d"></div>
-    <span>ONE-BEDROOMS</span>
+    <span>1-BED APARTMENTS</span>
   </div>
   <div style="position: absolute; left: 40px; top: 104px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 100px; line-height: 1; font-weight: 600; color: #bcd3e2; animation: none">from</div>
   <div style="position: absolute; left: 32px; top: 206px; display: flex; align-items: flex-start; font-size: 272px; line-height: 1; font-weight: 700; color: #f4b97d; font-variant-numeric: tabular-nums">
@@ -187,7 +249,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 <template id="t-Promo"><div style="width: 1152px; height: 768px; background: #f4b97d; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #002c3f">
   <div style="position: absolute; left: 40px; top: 30px; display: flex; align-items: center; gap: 22px; font-size: 72px; line-height: 1; font-weight: 700; letter-spacing: 0; animation: spromo-rise 8s cubic-bezier(.16,1,.3,1) infinite">
     <div style="width: 24px; height: 24px; border-radius: 50%; background: #002c3f"></div>
-    <span>LIMITED-TIME OFFER</span>
+    <span>NEW LEASE SPECIAL</span>
   </div>
   <div style="position: absolute; left: 32px; top: 118px; display: flex; align-items: flex-end; font-size: 250px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums">
     <span style="font-size: 125px; align-self: flex-start; margin-top: 26px; margin-right: 6px">$</span>
@@ -202,8 +264,8 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
     </div>
     <span style="margin-left: 30px; margin-bottom: 16px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 200px; font-weight: 700; line-height: 1; animation: spromo-slam 8s cubic-bezier(.16,1,.3,1) infinite">off</span>
   </div>
-  <div style="position: absolute; left: 40px; top: 384px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 132px; line-height: 1; font-weight: 600; white-space: nowrap; animation: spromo-rise3 8s cubic-bezier(.16,1,.3,1) infinite">your first month</div>
-  <div style="position: absolute; left: 40px; top: 548px; font-size: 36px; font-weight: 600; animation: spromo-rise3 8s cubic-bezier(.16,1,.3,1) infinite">For select employers · Leases signed by Dec 31</div>
+  <div style="position: absolute; left: 40px; top: 384px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 120px; line-height: 1; font-weight: 600; white-space: nowrap; animation: spromo-rise3 8s cubic-bezier(.16,1,.3,1) infinite">first month's rent</div>
+  <div style="position: absolute; left: 40px; top: 548px; font-size: 36px; font-weight: 600; animation: spromo-rise3 8s cubic-bezier(.16,1,.3,1) infinite">For select employers · New leases signed by Dec 31</div>
   <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #002c3f; color: #edeae8; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; box-sizing: border-box; font-size: 74px; font-weight: 600">
     <span>JADEWH.COM</span>
     <span style="color: #f4b97d; font-weight: 700">789-JADE</span>
@@ -212,7 +274,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 <template id="t-Promo-still"><div style="width: 1152px; height: 768px; background: #f4b97d; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #002c3f">
   <div style="position: absolute; left: 40px; top: 30px; display: flex; align-items: center; gap: 22px; font-size: 72px; line-height: 1; font-weight: 700; letter-spacing: 0; animation: none">
     <div style="width: 24px; height: 24px; border-radius: 50%; background: #002c3f"></div>
-    <span>LIMITED-TIME OFFER</span>
+    <span>NEW LEASE SPECIAL</span>
   </div>
   <div style="position: absolute; left: 32px; top: 118px; display: flex; align-items: flex-end; font-size: 250px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums">
     <span style="font-size: 125px; align-self: flex-start; margin-top: 26px; margin-right: 6px">$</span>
@@ -227,8 +289,8 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
     </div>
     <span style="margin-left: 30px; margin-bottom: 16px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 200px; font-weight: 700; line-height: 1; animation: none">off</span>
   </div>
-  <div style="position: absolute; left: 40px; top: 384px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 132px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">your first month</div>
-  <div style="position: absolute; left: 40px; top: 548px; font-size: 36px; font-weight: 600; animation: none">For select employers · Leases signed by Dec 31</div>
+  <div style="position: absolute; left: 40px; top: 384px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 120px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">first month's rent</div>
+  <div style="position: absolute; left: 40px; top: 548px; font-size: 36px; font-weight: 600; animation: none">For select employers · New leases signed by Dec 31</div>
   <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #002c3f; color: #edeae8; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; box-sizing: border-box; font-size: 74px; font-weight: 600">
     <span>JADEWH.COM</span>
     <span style="color: #f4b97d; font-weight: 700">789-JADE</span>
@@ -236,7 +298,10 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 </div></template>
 <template id="t-Tour"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div style="position: absolute; inset: 0; padding: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
-    <img src="street/jade-wordmark-cream.png" alt="The Jade" style="height: 80px; width: auto; animation: stour-fadeall 8s cubic-bezier(.16,1,.3,1) infinite">
+    <div style="display: flex; align-items: center; gap: 30px; animation: stour-fadeall 8s cubic-bezier(.16,1,.3,1) infinite">
+      <img src="street/jade-wordmark-cream.png" alt="The Jade" style="height: 74px; width: auto">
+      <span style="font-size: 44px; line-height: 1; font-weight: 600; letter-spacing: 0.3em; color: #bcd3e2">APARTMENTS</span>
+    </div>
     <div style="margin-top: 16px; font-family: 'Cormorant', Georgia, serif; font-size: 164px; line-height: 1; font-weight: 700; white-space: nowrap; animation: stour-rise 8s cubic-bezier(.16,1,.3,1) infinite">Book a <em style="font-style: italic; font-weight: 600">tour</em></div>
     <div style="margin-top: 20px; padding: 18px 64px 24px; background: #f4b97d; color: #002c3f; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 34px), calc(100% - 34px) 100%, 0 100%); transform-origin: left center; animation: stour-btn 8s cubic-bezier(.16,1,.3,1) infinite; display: flex; flex-direction: column; align-items: center">
       <div style="font-size: 70px; line-height: 1; font-weight: 700">(863)</div>
@@ -265,7 +330,10 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 </div></template>
 <template id="t-Tour-still"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div style="position: absolute; inset: 0; padding: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
-    <img src="street/jade-wordmark-cream.png" alt="The Jade" style="height: 80px; width: auto; animation: none">
+    <div style="display: flex; align-items: center; gap: 30px; animation: none">
+      <img src="street/jade-wordmark-cream.png" alt="The Jade" style="height: 74px; width: auto">
+      <span style="font-size: 44px; line-height: 1; font-weight: 600; letter-spacing: 0.3em; color: #bcd3e2">APARTMENTS</span>
+    </div>
     <div style="margin-top: 16px; font-family: 'Cormorant', Georgia, serif; font-size: 164px; line-height: 1; font-weight: 700; white-space: nowrap; animation: none">Book a <em style="font-style: italic; font-weight: 600">tour</em></div>
     <div style="margin-top: 20px; padding: 18px 64px 24px; background: #f4b97d; color: #002c3f; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 34px), calc(100% - 34px) 100%, 0 100%); transform-origin: left center; animation: none; display: flex; flex-direction: column; align-items: center">
       <div style="font-size: 70px; line-height: 1; font-weight: 700">(863)</div>
@@ -392,7 +460,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   <div style="position: absolute; left: 40px; right: 40px; top: 46px; height: 676px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
     <div style="font-family: 'Cormorant', Georgia, serif; font-size: 192px; line-height: 0.95; font-weight: 700; white-space: nowrap; animation: smovies-lightup 8s ease-out infinite">Movie nights</div>
     <div style="font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 140px; line-height: 1; font-weight: 600; white-space: nowrap; animation: smovies-lightup2 8s ease-out infinite">under the stars</div>
-    <div style="margin-top: 22px; font-size: 74px; line-height: 1; font-weight: 700; color: #bcd3e2; white-space: nowrap; animation: smovies-rise 8s ease-out infinite">TWO OUTDOOR THEATERS</div>
+    <div style="margin-top: 22px; font-size: 74px; line-height: 1; font-weight: 700; color: #bcd3e2; white-space: nowrap; animation: smovies-rise 8s ease-out infinite">FOR JADE RESIDENTS</div>
   </div>
 </div></template>
 <template id="t-Movies-still"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
@@ -495,7 +563,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   <div style="position: absolute; left: 40px; right: 40px; top: 46px; height: 676px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
     <div style="font-family: 'Cormorant', Georgia, serif; font-size: 192px; line-height: 0.95; font-weight: 700; white-space: nowrap; animation: none">Movie nights</div>
     <div style="font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 140px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">under the stars</div>
-    <div style="margin-top: 22px; font-size: 74px; line-height: 1; font-weight: 700; color: #bcd3e2; white-space: nowrap; animation: none">TWO OUTDOOR THEATERS</div>
+    <div style="margin-top: 22px; font-size: 74px; line-height: 1; font-weight: 700; color: #bcd3e2; white-space: nowrap; animation: none">FOR JADE RESIDENTS</div>
   </div>
 </div></template>
 <template id="t-Pool"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
@@ -503,7 +571,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   <div style="position: absolute; left: 0; top: 288px; width: 780px; height: 480px; background: #002c3f; clip-path: polygon(0 0, 86% 0, 100% 100%, 0 100%); animation: spool-swipe 8s cubic-bezier(.16,1,.3,1) infinite; display: flex; flex-direction: column; justify-content: center; padding-left: 40px; box-sizing: border-box">
     <div style="font-family: 'Cormorant', Georgia, serif; font-size: 200px; line-height: 0.92; font-weight: 700; white-space: nowrap; animation: spool-rise 8s cubic-bezier(.16,1,.3,1) infinite">Pool <span style="color: #f4b97d">+</span></div>
     <div style="font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 200px; line-height: 0.95; font-weight: 600; white-space: nowrap; animation: spool-rise 8s cubic-bezier(.16,1,.3,1) infinite">hot tub</div>
-    <div style="margin-top: 12px; font-size: 36px; font-weight: 600; letter-spacing: 0.14em; color: #bcd3e2; animation: spool-rise 8s cubic-bezier(.16,1,.3,1) infinite">CABANAS · FIRE PITS</div>
+    <div style="margin-top: 12px; font-size: 36px; font-weight: 600; letter-spacing: 0.1em; color: #bcd3e2; animation: spool-rise 8s cubic-bezier(.16,1,.3,1) infinite">STEPS FROM YOUR APARTMENT</div>
   </div>
 </div></template>
 <template id="t-Pool-still"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
@@ -511,13 +579,13 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   <div style="position: absolute; left: 0; top: 288px; width: 780px; height: 480px; background: #002c3f; clip-path: polygon(0 0, 86% 0, 100% 100%, 0 100%); animation: none; display: flex; flex-direction: column; justify-content: center; padding-left: 40px; box-sizing: border-box">
     <div style="font-family: 'Cormorant', Georgia, serif; font-size: 200px; line-height: 0.92; font-weight: 700; white-space: nowrap; animation: none">Pool <span style="color: #f4b97d">+</span></div>
     <div style="font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 200px; line-height: 0.95; font-weight: 600; white-space: nowrap; animation: none">hot tub</div>
-    <div style="margin-top: 12px; font-size: 36px; font-weight: 600; letter-spacing: 0.14em; color: #bcd3e2; animation: none">CABANAS · FIRE PITS</div>
+    <div style="margin-top: 12px; font-size: 36px; font-weight: 600; letter-spacing: 0.1em; color: #bcd3e2; animation: none">STEPS FROM YOUR APARTMENT</div>
   </div>
 </div></template>
 <template id="t-Price2"><div style="width: 1152px; height: 768px; background: #edeae8; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #002c3f">
   <div style="position: absolute; left: 40px; top: 30px; display: flex; align-items: center; gap: 22px; font-size: 74px; line-height: 1; font-weight: 700; animation: sprice2-rise 8s cubic-bezier(.16,1,.3,1) infinite">
     <div style="width: 24px; height: 24px; border-radius: 50%; background: #f4b97d"></div>
-    <span>TWO BED · TWO BATH</span>
+    <span>2-BED APARTMENTS</span>
   </div>
   <div style="position: absolute; left: 40px; top: 104px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 100px; line-height: 1; font-weight: 600; color: #1b6083; animation: sprice2-rise 8s cubic-bezier(.16,1,.3,1) infinite">from</div>
   <div style="position: absolute; left: 32px; top: 206px; display: flex; align-items: flex-start; font-size: 272px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums">
@@ -538,7 +606,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
     <span style="font-size: 74px; margin-top: 180px; margin-left: 12px; font-weight: 600">/mo</span>
   </div>
   <div style="position: absolute; left: 40px; top: 498px; width: 560px; height: 8px; background: #f4b97d; transform-origin: left center; animation: sprice2-sweep 8s cubic-bezier(.16,1,.3,1) infinite"></div>
-  <div style="position: absolute; left: 40px; top: 520px; font-family: 'Cormorant', Georgia, serif; font-size: 62px; line-height: 1.2; font-weight: 600; animation: sprice2-rise3 8s cubic-bezier(.16,1,.3,1) infinite">The <em style="font-style: italic">Comfy</em></div>
+  <div style="position: absolute; left: 40px; top: 520px; font-family: 'Cormorant', Georgia, serif; font-size: 62px; line-height: 1.2; font-weight: 600; animation: sprice2-rise3 8s cubic-bezier(.16,1,.3,1) infinite">The <em style="font-style: italic">Comfy</em> · two baths</div>
   <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #002c3f; color: #edeae8; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; box-sizing: border-box; font-size: 74px; font-weight: 600">
     <span>JADEWH.COM</span>
     <span style="color: #f4b97d; font-weight: 700">789-JADE</span>
@@ -547,7 +615,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 <template id="t-Price2-still"><div style="width: 1152px; height: 768px; background: #edeae8; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #002c3f">
   <div style="position: absolute; left: 40px; top: 30px; display: flex; align-items: center; gap: 22px; font-size: 74px; line-height: 1; font-weight: 700; animation: none">
     <div style="width: 24px; height: 24px; border-radius: 50%; background: #f4b97d"></div>
-    <span>TWO BED · TWO BATH</span>
+    <span>2-BED APARTMENTS</span>
   </div>
   <div style="position: absolute; left: 40px; top: 104px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 100px; line-height: 1; font-weight: 600; color: #1b6083; animation: none">from</div>
   <div style="position: absolute; left: 32px; top: 206px; display: flex; align-items: flex-start; font-size: 272px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums">
@@ -568,15 +636,53 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
     <span style="font-size: 74px; margin-top: 180px; margin-left: 12px; font-weight: 600">/mo</span>
   </div>
   <div style="position: absolute; left: 40px; top: 498px; width: 560px; height: 8px; background: #f4b97d; transform-origin: left center; animation: none"></div>
-  <div style="position: absolute; left: 40px; top: 520px; font-family: 'Cormorant', Georgia, serif; font-size: 62px; line-height: 1.2; font-weight: 600; animation: none">The <em style="font-style: italic">Comfy</em></div>
+  <div style="position: absolute; left: 40px; top: 520px; font-family: 'Cormorant', Georgia, serif; font-size: 62px; line-height: 1.2; font-weight: 600; animation: none">The <em style="font-style: italic">Comfy</em> · two baths</div>
   <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #002c3f; color: #edeae8; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; box-sizing: border-box; font-size: 74px; font-weight: 600">
     <span>JADEWH.COM</span>
     <span style="color: #f4b97d; font-weight: 700">789-JADE</span>
   </div>
 </div></template>
+<template id="t-Logo2"><div class="" style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
+  <div class="bg-aerial" style="position: absolute; inset: 0; animation: slogo2-kb 8s ease-out infinite"></div>
+  <div style="position: absolute; inset: 0; background: rgba(0, 44, 63, 0.74)"></div>
+  <div style="position: absolute; left: 485px; top: 50px; width: 182px; height: 278px">
+    <svg viewBox="102.8 22.0 306.3 468.1" width="182" height="278" aria-hidden="true" style="position: absolute; inset: 0; overflow: visible">
+      <path class="gf" fill="#eeebe9" style="--dx: 940px; --dy: 860px; --r: 135deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.12s" d="M374.31,359.55l-64.46-66.14c-.71-.73-1.9-.61-2.46.24l-58.82,90.03c-.15.23-.24.49-.25.76l-6.42,98.79c-.07,1.02.83,1.830,1.84,1.66l59.2-9.88c.45-.07.84-.34,1.08-.72l70.5-112.8c.39-.62.3-1.42-.21-1.94ZM261.34,463.44c-.07,1.16-1.03,2.05-2.18,2.05-.04,0-.09,0-.13,0-1.2-.07-2.12-1.1-2.05-2.31l3.920-66.62c.07-1.2.96-2.22,2.31-2.05,1.2.07,2.12,1.1,2.05,2.31l-3.92,66.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -60px; --dy: 1120px; --r: -100deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.22s" d="M299.84,202.57l-46.89-25.73c-.58-.32-1.3-.29-1.85.09l-36.74,24.98c-.37.25-.63.63-.73,1.06l-23.65,100.81c-.12.53,0,1.08.34,1.51l49.11,61.58c.75.94,2.19.88,2.85-.12l58.17-86.87c.2-.29.3-.63.3-.98v-74.76c0-.65-.35-1.24-.92-1.55ZM240.24,348.8c-.4.31-.88.47-1.35.47-.65,0-1.29-.28-1.72-.84l-27.81-35.43c-.75-.95-.58-2.32.37-3.07.94-.75,2.32-.59,3.07.37l27.81,35.43c.75.95.58,2.32-.37,3.07ZM250.97,193.72l-18.2,12.83c-.38.27-.82.4-1.26.4-.68,0-1.36-.32-1.79-.93-.69-.98-.46-2.35.53-3.04l18.2-12.83c.97-.68,2.34-.46,3.04.53.69.98.46,2.35-.53,3.04Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 1360px; --dy: -60px; --r: 190deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.32s" d="M403.79,216.03l-35.41-74.17c-.66-1.39-2.55-1.64-3.54-.46l-50.9,60.19c-.32.38-.5.87-.5,1.37v72.58c0,.56.22,1.1.62,1.5l64.85,65.23c1.22,1.22,3.31.56,3.6-1.14l21.45-123.82c.08-.43.01-.88-.18-1.28ZM365.63,163.29l-21.98,25.14c-.43.49-1.04.75-1.64.75-.51,0-1.02-.18-1.44-.54-.9-.79-1-2.17-.2-3.08l21.98-25.14c.8-.91,2.18-1,3.08-.2.9.79,1,2.170.2,3.08Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 860px; --dy: -960px; --r: 150deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.42s" d="M358.11,122.89l-95.03-92.87c-1.28-1.25-3.43-.32-3.4,1.46l2.17,127.32c.01.72.41,1.38,1.04,1.72l42.4,23.08c.82.45,1.84.27,2.46-.44l50.47-57.52c.7-.8.65-2.01-.11-2.75ZM274.77,149.44c0,1.21-.98,2.18-2.18,2.18s-2.18-.98-2.18-2.18v-33.39c0-1.21.98-2.18,2.18-2.18s2.18.98,2.18,2.18v33.39Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -940px; --dy: 860px; --r: -135deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.52s" d="M232.1,384l-52.02-66.88c-.58-.75-1.61-.97-2.45-.53l-65.11,33.95c-1.12.58-1.4,2.06-.58,3.01l111.58,129.61c1.15,1.33,3.34.59,3.44-1.16l5.56-96.68c.03-.47-.12-.94-.41-1.31ZM155.98,387.02c-.41.35-.92.52-1.42.52-.61,0-1.23-.26-1.66-.77l-15.87-18.59c-.79-.92-.68-2.29.24-3.08.92-.79,2.29-.68,3.08.24l15.87,18.59c.79.92.68,2.29-.24,3.08ZM165.55,337.46l-34.38,17.89c-.32.16-.67.24-1.01.24-.79,0-1.55-.43-1.94-1.18-.56-1.07-.14-2.39.93-2.95l34.38-17.89c1.05-.55,2.38-.15,2.95.93.56,1.07.14,2.39-.93,2.950Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -1360px; --dy: -80px; --r: -190deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.62s" d="M197.7,204.46l-78.89-51.31c-1.02-.67-2.38.03-2.44,1.25l-8.36,177.73c-.06,1.21,1.21,2.03,2.3,1.48l66.97-34.03c.42-.21.73-.61.83-1.07l20.28-92.38c.14-.64-.13-1.310-.68-1.66ZM122.81,313.27c-.07,1.16-1.04,2.05-2.18,2.05-.05,0-.09,0-.14,0-1.21-.07-2.12-1.12-2.04-2.32l4.1-64.62c.07-1.21,1.08-2.25,2.32-2.04,1.21.07,2.12,1.12,2.04,2.32l-4.1,64.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -860px; --dy: -960px; --r: -150deg; animation: slogo2-gfacet 8s cubic-bezier(.16,1,.3,1) infinite both; animation-delay: 0.72s" d="M241.98,28.47c-.03-1.23-1.5-1.84-2.4-1.01l-114.69,106.86c-.67.63-.58,1.72.18,2.23l77.94,52.15c.48.32,1.1.32,1.58,0l40.11-26.74c.41-.27.65-.73.63-1.22l-3.36-132.27ZM205.75,176.76c-.43.59-1.1.91-1.78.91-.44,0-.89-.13-1.270-.41l-54.25-38.87c-.98-.7-1.21-2.07-.5-3.05.71-.97,2.08-1.21,3.05-.5l54.25,38.87c.98.7,1.21,2.07.5,3.05Z"></path>
+    </svg>
+    <span class="gem-flash" style="animation: slogo2-flash 8s ease-out infinite"></span>
+    <span class="gem-gleam"></span>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; top: 380px; text-align: center; font-size: 140px; line-height: 1; font-weight: 700; white-space: nowrap; animation: slogo2-rise 8s cubic-bezier(.16,1,.3,1) infinite">NOW LEASING</div>
+  <div style="position: absolute; left: 0; right: 0; top: 548px; text-align: center; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 124px; line-height: 1; font-weight: 600; color: #f4b97d; white-space: nowrap; animation: slogo2-rise2 8s cubic-bezier(.16,1,.3,1) infinite">1 &amp; 2 bed apartments</div>
+</div></template>
+<template id="t-Logo2-still"><div class="still" style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
+  <div class="bg-aerial" style="position: absolute; inset: 0; animation: none"></div>
+  <div style="position: absolute; inset: 0; background: rgba(0, 44, 63, 0.74)"></div>
+  <div style="position: absolute; left: 485px; top: 50px; width: 182px; height: 278px">
+    <svg viewBox="102.8 22.0 306.3 468.1" width="182" height="278" aria-hidden="true" style="position: absolute; inset: 0; overflow: visible">
+      <path class="gf" fill="#eeebe9" style="--dx: 940px; --dy: 860px; --r: 135deg; animation: none; animation-delay: 0.12s" d="M374.31,359.55l-64.46-66.14c-.71-.73-1.9-.61-2.46.24l-58.82,90.03c-.15.23-.24.49-.25.76l-6.42,98.79c-.07,1.02.83,1.830,1.84,1.66l59.2-9.88c.45-.07.84-.34,1.08-.72l70.5-112.8c.39-.62.3-1.42-.21-1.94ZM261.34,463.44c-.07,1.16-1.03,2.05-2.18,2.05-.04,0-.09,0-.13,0-1.2-.07-2.12-1.1-2.05-2.31l3.920-66.62c.07-1.2.96-2.22,2.31-2.05,1.2.07,2.12,1.1,2.05,2.31l-3.92,66.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -60px; --dy: 1120px; --r: -100deg; animation: none; animation-delay: 0.22s" d="M299.84,202.57l-46.89-25.73c-.58-.32-1.3-.29-1.85.09l-36.74,24.98c-.37.25-.63.63-.73,1.06l-23.65,100.81c-.12.53,0,1.08.34,1.51l49.11,61.58c.75.94,2.19.88,2.85-.12l58.17-86.87c.2-.29.3-.63.3-.98v-74.76c0-.65-.35-1.24-.92-1.55ZM240.24,348.8c-.4.31-.88.47-1.35.47-.65,0-1.29-.28-1.72-.84l-27.81-35.43c-.75-.95-.58-2.32.37-3.07.94-.75,2.32-.59,3.07.37l27.81,35.43c.75.95.58,2.32-.37,3.07ZM250.97,193.72l-18.2,12.83c-.38.27-.82.4-1.26.4-.68,0-1.36-.32-1.79-.93-.69-.98-.46-2.35.53-3.04l18.2-12.83c.97-.68,2.34-.46,3.04.53.69.98.46,2.35-.53,3.04Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 1360px; --dy: -60px; --r: 190deg; animation: none; animation-delay: 0.32s" d="M403.79,216.03l-35.41-74.17c-.66-1.39-2.55-1.64-3.54-.46l-50.9,60.19c-.32.38-.5.87-.5,1.37v72.58c0,.56.22,1.1.62,1.5l64.85,65.23c1.22,1.22,3.31.56,3.6-1.14l21.45-123.82c.08-.43.01-.88-.18-1.28ZM365.63,163.29l-21.98,25.14c-.43.49-1.04.75-1.64.75-.51,0-1.02-.18-1.44-.54-.9-.79-1-2.17-.2-3.08l21.98-25.14c.8-.91,2.18-1,3.08-.2.9.79,1,2.170.2,3.08Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: 860px; --dy: -960px; --r: 150deg; animation: none; animation-delay: 0.42s" d="M358.11,122.89l-95.03-92.87c-1.28-1.25-3.43-.32-3.4,1.46l2.17,127.32c.01.72.41,1.38,1.04,1.72l42.4,23.08c.82.45,1.84.27,2.46-.44l50.47-57.52c.7-.8.65-2.01-.11-2.75ZM274.77,149.44c0,1.21-.98,2.18-2.18,2.18s-2.18-.98-2.18-2.18v-33.39c0-1.21.98-2.18,2.18-2.18s2.18.98,2.18,2.18v33.39Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -940px; --dy: 860px; --r: -135deg; animation: none; animation-delay: 0.52s" d="M232.1,384l-52.02-66.88c-.58-.75-1.61-.97-2.45-.53l-65.11,33.95c-1.12.58-1.4,2.06-.58,3.01l111.58,129.61c1.15,1.33,3.34.59,3.44-1.16l5.56-96.68c.03-.47-.12-.94-.41-1.31ZM155.98,387.02c-.41.35-.92.52-1.42.52-.61,0-1.23-.26-1.66-.77l-15.87-18.59c-.79-.92-.68-2.29.24-3.08.92-.79,2.29-.68,3.08.24l15.87,18.59c.79.92.68,2.29-.24,3.08ZM165.55,337.46l-34.38,17.89c-.32.16-.67.24-1.01.24-.79,0-1.55-.43-1.94-1.18-.56-1.07-.14-2.39.93-2.95l34.38-17.89c1.05-.55,2.38-.15,2.95.93.56,1.07.14,2.39-.93,2.950Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -1360px; --dy: -80px; --r: -190deg; animation: none; animation-delay: 0.62s" d="M197.7,204.46l-78.89-51.31c-1.02-.67-2.38.03-2.44,1.25l-8.36,177.73c-.06,1.21,1.21,2.03,2.3,1.48l66.97-34.03c.42-.21.73-.61.83-1.07l20.28-92.38c.14-.64-.13-1.310-.68-1.66ZM122.81,313.27c-.07,1.16-1.04,2.05-2.18,2.05-.05,0-.09,0-.14,0-1.21-.07-2.12-1.12-2.04-2.32l4.1-64.62c.07-1.21,1.08-2.25,2.32-2.04,1.21.07,2.12,1.12,2.04,2.32l-4.1,64.62Z"></path>
+      <path class="gf" fill="#eeebe9" style="--dx: -860px; --dy: -960px; --r: -150deg; animation: none; animation-delay: 0.72s" d="M241.98,28.47c-.03-1.23-1.5-1.84-2.4-1.01l-114.69,106.86c-.67.63-.58,1.72.18,2.23l77.94,52.15c.48.32,1.1.32,1.58,0l40.11-26.74c.41-.27.65-.73.63-1.22l-3.36-132.27ZM205.75,176.76c-.43.59-1.1.91-1.78.91-.44,0-.89-.13-1.270-.41l-54.25-38.87c-.98-.7-1.21-2.07-.5-3.05.71-.97,2.08-1.21,3.05-.5l54.25,38.87c.98.7,1.21,2.07.5,3.05Z"></path>
+    </svg>
+    <span class="gem-flash" style="animation: none"></span>
+    <span class="gem-gleam"></span>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; top: 380px; text-align: center; font-size: 140px; line-height: 1; font-weight: 700; white-space: nowrap; animation: none">NOW LEASING</div>
+  <div style="position: absolute; left: 0; right: 0; top: 548px; text-align: center; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 124px; line-height: 1; font-weight: 600; color: #f4b97d; white-space: nowrap; animation: none">1 &amp; 2 bed apartments</div>
+</div></template>
 <template id="t-Ticker"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div style="position: absolute; left: 40px; top: 60px; font-family: 'Cormorant', Georgia, serif; font-size: 200px; line-height: 0.95; font-weight: 700; white-space: nowrap; animation: sticker-rise 8s cubic-bezier(.16,1,.3,1) infinite">One rent.</div>
-  <div style="position: absolute; left: 40px; top: 254px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 130px; line-height: 1; font-weight: 600; white-space: nowrap; animation: sticker-rise2 8s cubic-bezier(.16,1,.3,1) infinite">The whole resort.</div>
+  <div style="position: absolute; left: 40px; top: 254px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 124px; line-height: 1; font-weight: 600; white-space: nowrap; animation: sticker-rise2 8s cubic-bezier(.16,1,.3,1) infinite">Everything included.</div>
   <div style="position: absolute; left: 0; right: 0; top: 414px; height: 112px; background: #1b6083; overflow: hidden; display: flex; align-items: center">
     <div style="display: flex; width: max-content; white-space: nowrap; font-size: 88px; line-height: 1; font-weight: 700; animation: sticker-left 16s linear infinite">
       <span>POOL · 24/7 GYM · PICKLEBALL · PET PARKS · COWORKING · 2 THEATERS ·&#160;</span><span>POOL · 24/7 GYM · PICKLEBALL · PET PARKS · COWORKING · 2 THEATERS ·&#160;</span>
@@ -586,7 +692,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 </div></template>
 <template id="t-Ticker-still"><div style="width: 1152px; height: 768px; background: #002c3f; position: relative; overflow: hidden; font-family: 'Poppins', Arial, sans-serif; color: #edeae8">
   <div style="position: absolute; left: 40px; top: 60px; font-family: 'Cormorant', Georgia, serif; font-size: 200px; line-height: 0.95; font-weight: 700; white-space: nowrap; animation: none">One rent.</div>
-  <div style="position: absolute; left: 40px; top: 254px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 130px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">The whole resort.</div>
+  <div style="position: absolute; left: 40px; top: 254px; font-family: 'Cormorant', Georgia, serif; font-style: italic; font-size: 124px; line-height: 1; font-weight: 600; white-space: nowrap; animation: none">Everything included.</div>
   <div style="position: absolute; left: 0; right: 0; top: 414px; height: 112px; background: #1b6083; overflow: hidden; display: flex; align-items: center">
     <div style="display: flex; width: max-content; white-space: nowrap; font-size: 88px; line-height: 1; font-weight: 700; animation: none">
       <span>POOL · 24/7 GYM · PICKLEBALL · PET PARKS · COWORKING · 2 THEATERS ·&#160;</span><span>POOL · 24/7 GYM · PICKLEBALL · PET PARKS · COWORKING · 2 THEATERS ·&#160;</span>
@@ -688,6 +794,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
         <span>SEND THEM TO</span>
       </div>
       <div class="wm-navy" style="margin-top: 34px; width: 1040px; height: 180px"></div>
+      <div style="margin-top: 26px; font-size: 76px; line-height: 1; font-weight: 600; letter-spacing: 0.3em; color: #1b6083">APARTMENTS</div>
     </div>
   
 </div></template>
@@ -710,7 +817,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   //   ?date=2027-01-02      pretend it's this date (testing slide expiry)
   //   ?secs=8               seconds per slide
   // ---------------------------------------------------------------------------
-  var ROTATION = [{"f":"Main"},{"f":"Price1"},{"f":"Promo","until":"2026-12-31"},{"f":"Tour"},{"f":"Movies"},{"f":"Pool"},{"f":"Price2"},{"f":"Tour"},{"f":"Ticker"},{"f":"Office"},{"f":"Gym"},{"f":"Pets"},{"f":"Kitchen"},{"f":"Refer"}];
+  var ROTATION = [{"f":"Logo"},{"f":"Main"},{"f":"Price1"},{"f":"Promo","until":"2026-12-31"},{"f":"Tour"},{"f":"Movies"},{"f":"Pool"},{"f":"Price2"},{"f":"Tour"},{"f":"Logo2"},{"f":"Ticker"},{"f":"Office"},{"f":"Gym"},{"f":"Pets"},{"f":"Kitchen"},{"f":"Refer"}];
   var q = new URLSearchParams(location.search);
   var SECS = Math.max(3, Number(q.get('secs') || 8));
   var STILL = q.get('still') === '1';
@@ -752,10 +859,10 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 
   // Preload every image so slides never pop in half-loaded.
   var seen = {};
-  Array.prototype.forEach.call(document.querySelectorAll('template'), function (t) {
-    var html = t.innerHTML, re = /street\/[\w.-]+\.(?:jpg|png)/g, m;
+  (function () {
+    var html = document.documentElement.innerHTML, re = /street\/[\w.-]+\.(?:jpg|png)/g, m;
     while ((m = re.exec(html))) { if (!seen[m[0]]) { seen[m[0]] = 1; new Image().src = m[0]; } }
-  });
+  })();
 
   var started = Date.now(), list = [], i = -1;
   function tick() {
