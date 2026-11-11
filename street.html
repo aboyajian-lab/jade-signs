@@ -811,8 +811,8 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
   // ---------------------------------------------------------------------------
   // Street sign player. URL options:
   //   ?x=0&y=0&w=576&h=384  draw into an exact pixel box (for the LED processor's capture area)
-  //                         default: fit the whole window, centered
-  //   ?fit=fill             stretch to fill the whole window (16:9 player -> 3:2 LED wall)
+  //                         default: stretch to fill the whole window (16:9 player -> 3:2 LED wall)
+  //   ?fit=contain          keep true proportions, letterboxed (previews in a normal browser)
   //   ?still=1              no motion (code-compliance version)
   //   ?slide=Pool           show one slide only (testing)
   //   ?date=2027-01-02      pretend it's this date (testing slide expiry)
@@ -828,7 +828,7 @@ html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000;
 
   function layout() {
     var W = 1152, H = 768, vw = window.innerWidth, vh = window.innerHeight;
-    if (q.get('fit') === 'fill') {
+    if (q.get('fit') !== 'contain' && !(q.has('w') && q.has('h'))) {
       // Stretch to the whole frame. For players that send a 16:9 frame the LED processor
       // squeezes back onto the 3:2 wall (e.g. Rockbot), so the design lands correctly proportioned.
       stage.style.transform = 'scale(' + (vw / W) + ',' + (vh / H) + ')';
