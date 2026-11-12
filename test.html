@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LED Module Test</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; cursor: none; }
+  #p { position: fixed; inset: 0; }
+  #label {
+    position: fixed; left: 2vmin; bottom: 2vmin; padding: 0.6vmin 1.4vmin;
+    font: 600 3.2vmin/1.2 Arial, sans-serif; color: #fff; background: rgba(0,0,0,.75);
+    border: 0.25vmin solid #fff; border-radius: 0.6vmin; transition: opacity .3s;
+  }
+  #label.hide { opacity: 0; }
+  .line { position: absolute; background: #fff; }
+</style>
+</head>
+<body>
+<div id="p"></div>
+<div id="label"></div>
+<script>
+(function () {
+  // LED module test patterns. Cycles automatically.
+  // URL options: ?secs=6 (seconds per pattern)  ?only=red,green,white  ?label=0 (never show the name)
+  // Keys / clicks: click or Space = pause/resume, Left/Right arrows = previous/next.
+  var q = new URLSearchParams(location.search);
+  var SECS = Math.max(2, Number(q.get('secs') || 6));
+  var SHOW_LABEL = q.get('label') !== '0';
+  var p = document.getElementById('p'), label = document.getElementById('label');
+  var anim = null;
+
+  function solid(c) { return function () { p.style.background = c; }; }
+  function css(bg) { return function () { p.style.background = bg; }; }
+  function sweep(vertical) {
+    return function () {
+      p.style.background = '#000';
+      var l = document.createElement('div'); l.className = 'line';
+      if (vertical) { l.style.top = 0; l.style.bottom = 0; l.style.width = '4px'; }
+      else { l.style.left = 0; l.style.right = 0; l.style.height = '4px'; }
+      p.appendChild(l);
+      var t0 = performance.now();
+      (function step(t) {
+        var f = ((t - t0) / (SECS * 1000 / 2)) % 1;   // two passes per pattern
+        if (vertical) l.style.left = (f * 100) + '%'; else l.style.top = (f * 100) + '%';
+        anim = requestAnimationFrame(step);
+      })(t0);
+    };
+  }
+  function checker() {
+    return function () {
+      var flip = false;
+      var draw = function () {
+        var a = flip ? '#fff' : '#000', b = flip ? '#000' : '#fff';
+        p.style.background = 'repeating-conic-gradient(' + a + ' 0 25%, ' + b + ' 0 50%) 0 0 / 16px 16px';
+      };
+      draw();
+      anim = setInterval(function () { flip = !flip; draw(); }, 1000);
+    };
+  }
+
+  var ALL = [
+    ['red',     'Red 100%',              solid('#ff0000')],
+    ['green',   'Green 100%',            solid('#00ff00')],
+    ['blue',    'Blue 100%',             solid('#0000ff')],
+    ['white',   'White 100%',            solid('#ffffff')],
+    ['black',   'Black (stuck pixels)',  solid('#000000')],
+    ['gray50',  'Gray 50%',              solid('#808080')],
+    ['gray25',  'Gray 25%',              solid('#404040')],
+    ['cyan',    'Cyan',                  solid('#00ffff')],
+    ['magenta', 'Magenta',               solid('#ff00ff')],
+    ['yellow',  'Yellow',                solid('#ffff00')],
+    ['ramp',    'Gray ramp',             css('linear-gradient(90deg,#000,#fff)')],
+    ['rgbramp', 'R / G / B ramps',       css('linear-gradient(90deg,#000,#f00) 0 0/100% 33.4% no-repeat,' +
+                                             'linear-gradient(90deg,#000,#0f0) 0 50%/100% 33.4% no-repeat,' +
+                                             'linear-gradient(90deg,#000,#00f) 0 100%/100% 33.4% no-repeat,#000')],
+    ['checker', 'Checkerboard (flips)',  checker()],
+    ['vline',   'Moving vertical line',  sweep(true)],
+    ['hline',   'Moving horizontal line',sweep(false)]
+  ];
+  var only = (q.get('only') || '').split(',').filter(Boolean);
+  var list = only.length ? ALL.filter(function (x) { return only.indexOf(x[0]) >= 0; }) : ALL;
+  if (!list.length) list = ALL;
+
+  var i = -1, timer = null, paused = false, hideT = null;
+  function stop() {
+    if (anim) { cancelAnimationFrame(anim); clearInterval(anim); anim = null; }
+    p.innerHTML = ''; p.style.background = '#000';
+  }
+  function show(n) {
+    i = (n + list.length) % list.length;
+    stop();
+    list[i][2]();
+    label.textContent = (i + 1) + '/' + list.length + '  ' + list[i][1] + (paused ? '  (paused)' : '');
+    if (SHOW_LABEL) {
+      label.classList.remove('hide');
+      clearTimeout(hideT);
+      hideT = setTimeout(function () { if (!paused) label.classList.add('hide'); }, 1500);
+    } else { label.classList.add('hide'); }
+  }
+  function schedule() {
+    clearTimeout(timer);
+    if (!paused) timer = setTimeout(function () { show(i + 1); schedule(); }, SECS * 1000);
+  }
+  function togglePause() { paused = !paused; show(i); schedule(); }
+
+  document.addEventListener('click', togglePause);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === ' ') { e.preventDefault(); togglePause(); }
+    else if (e.key === 'ArrowRight') { show(i + 1); schedule(); }
+    else if (e.key === 'ArrowLeft') { show(i - 1); schedule(); }
+  });
+  show(0); schedule();
+})();
+</script>
+</body>
+</html>
