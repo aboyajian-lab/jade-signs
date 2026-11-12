@@ -79,8 +79,10 @@
     ['hline',   'Moving horizontal line',sweep(false)]
   ];
   var only = (q.get('only') || '').split(',').filter(Boolean);
-  var list = only.length ? ALL.filter(function (x) { return only.indexOf(x[0]) >= 0; }) : ALL;
-  if (!list.length) list = ALL;
+  // Ramps are a whole-screen smoothness check, not a module test: only when asked for by name.
+  var DEFAULT = ALL.filter(function (x) { return x[0] !== 'ramp' && x[0] !== 'rgbramp'; });
+  var list = only.length ? ALL.filter(function (x) { return only.indexOf(x[0]) >= 0; }) : DEFAULT;
+  if (!list.length) list = DEFAULT;
 
   var i = -1, timer = null, paused = false, hideT = null;
   function stop() {

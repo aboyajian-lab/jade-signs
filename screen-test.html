@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jade Big Screen — Module Test (signage + test overlay)</title>
+<link rel="stylesheet" href="jade-screen.css?v=4">
+<style>
+  #stage { display:flex; width:100%; height:100%; }
+  .pane-holder { position:relative; height:100%; }
+  .holder-main { flex:1 1 auto; }
+  .holder-side { flex:0 0 auto; aspect-ratio:442/1080; border-left:2px solid #000; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="pane-holder holder-main"><div class="pane" id="p-main"><div class="layer1"></div><div class="layer2"></div></div></div>
+  <div class="pane-holder holder-side"><div class="pane narrow" id="p-side"><div class="layer1"></div><div class="layer2"></div></div></div>
+</div>
+<div id="fallback"><h1>THE JADE</h1><p>BIG SCREEN &middot; COURTYARD</p></div>
+<script>var PANE_DEFS = [{ sel: "#p-main", kind: "main" }, { sel: "#p-side", kind: "side" }];</script>
+<script src="jade-sched.js?v=1"></script>
+<script src="jade-screen.js?v=4"></script>
+<script src="module-test.js?v=1"></script>
+</body>
+</html>
